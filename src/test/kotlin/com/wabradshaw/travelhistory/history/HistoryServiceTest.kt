@@ -235,4 +235,83 @@ class HistoryServiceTest {
         Assert.assertEquals("b", result?.name)
     }
 
+    /**
+     * Tests getLatestBlogPost when the repository doesn't contain any history will return null.
+     */
+    @Test
+    fun testGetLatestBlogPost_noHistory() {
+
+        val history = emptyList<LocationHistory>()
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getLatestBlogPost()
+
+        Assert.assertEquals(null, result)
+    }
+
+    /**
+     * Tests getLatestBlogPost when the repository contains history, but no blog posts will return null.
+     */
+    @Test
+    fun testGetLatestBlogPost_noBlogPosts() {
+
+        val history = listOf(LocationHistory(DateTime.now().plusDays(-10), DateTime.now().plusDays(-5), "a","a", 1),
+                                                LocationHistory(DateTime.now().plusDays(-5), DateTime.now().plusDays(-1), "b","b", 1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getLatestBlogPost()
+
+        Assert.assertEquals(null, result)
+    }
+
+    /**
+     * Tests getLatestBlogPost when the repository contains a single blog post will return it.
+     */
+    @Test
+    fun testGetLatestBlogPost_oneBlogPost() {
+
+        val history = listOf(LocationHistory(DateTime.now().plusDays(-10), DateTime.now().plusDays(-5), "a","a", 1, BlogPost("https://example.com","blog1")))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getLatestBlogPost()
+
+        Assert.assertEquals("blog1", result?.name)
+    }
+
+    /**
+     * Tests getLatestBlogPost when the repository contains multiple blog posts will return the latest one.
+     */
+    @Test
+    fun testGetLatestBlogPost_multipleBlogPost() {
+
+        val history = listOf(LocationHistory(DateTime.now().plusDays(-10), DateTime.now().plusDays(-5), "a","a", 1, BlogPost("https://example.com","blog1")),
+                                                LocationHistory(DateTime.now().plusDays(-3), DateTime.now().plusDays(-5), "b","b", 1, BlogPost("https://example.com","blog2")),
+                                                LocationHistory(DateTime.now().plusDays(-6), DateTime.now().plusDays(-5), "c","c", 1, BlogPost("https://example.com","blog3")))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getLatestBlogPost()
+
+        Assert.assertEquals("blog2", result?.name)
+    }
+
 }

@@ -31,9 +31,7 @@ class HistoryService() {
         return allHistory.filter { it.startTime < DateTime.now() }
                          .filter { it.endTime == null || DateTime.now().isBefore(it.endTime) }
                          .sortedBy { it.startTime }
-                         .reversed()
-                         .firstOrNull()
-
+                         .lastOrNull()
     }
 
     /**
@@ -45,6 +43,20 @@ class HistoryService() {
         return allHistory.filter { it.startTime > DateTime.now() }
                          .sortedBy { it.startTime }
                          .firstOrNull()
+
+    }
+
+    /**
+     * Gets the blog post for the most recent location the person has visited and written about. Null if the person
+     * hasn't written any blog posts.
+     */
+    fun getLatestBlogPost(): BlogPost? {
+        val allHistory = repository.getAllHistory()
+
+        return allHistory.filter { it.blog != null }
+                         .sortedBy { it.startTime }
+                         .lastOrNull()
+                         ?.blog
 
     }
 }

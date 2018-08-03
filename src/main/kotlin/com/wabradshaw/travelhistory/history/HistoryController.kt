@@ -45,4 +45,17 @@ class HistoryController(val service: HistoryService){
             return ResponseEntity.noContent().build();
         }
     }
+
+    /**
+     * Gets the latest blog post the person has written. Null if they have not written any blog posts.
+     */
+    @GetMapping("/blog/latest")
+    fun getLatestBlogPost(): ResponseEntity<BlogPost?> {
+        val blogPost = service.getLatestBlogPost();
+        if(blogPost != null) {
+            return ResponseEntity.ok(blogPost);
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+    }
 }

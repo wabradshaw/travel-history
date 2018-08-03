@@ -109,4 +109,37 @@ class HistoryControllerTest {
         assertEquals(204, result.statusCodeValue)
         assertEquals(null, result.body)
     }
+
+    /**
+     * Tests the getNextLocation method if that information is known.
+     */
+    @Test
+    fun testGetLatestBlogPost_hasOne(){
+        val target = BlogPost("https://example.com", "example")
+
+        val mockService = Mockito.mock(HistoryService::class.java)
+        Mockito.`when`(mockService.getLatestBlogPost()).thenReturn(target)
+
+        val controller = HistoryController(mockService)
+        val result = controller.getLatestBlogPost()
+
+        assertEquals(200, result.statusCodeValue)
+        assertEquals(target, result.body)
+    }
+
+    /**
+     * Tests the getNextLocation method if that information is missing.
+     */
+    @Test
+    fun testGetLatestBlogPost_unknown(){
+
+        val mockService = Mockito.mock(HistoryService::class.java)
+        Mockito.`when`(mockService.getLatestBlogPost()).thenReturn(null)
+
+        val controller = HistoryController(mockService)
+        val result = controller.getLatestBlogPost()
+
+        assertEquals(204, result.statusCodeValue)
+        assertEquals(null, result.body)
+    }
 }

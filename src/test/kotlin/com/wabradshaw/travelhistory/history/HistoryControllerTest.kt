@@ -147,6 +147,22 @@ class HistoryControllerTest {
     }
 
     /**
+     * Tests the updateLocation method if the user has supplied an incorrect authentication key
+     */
+    @Test
+    fun testUpdateLocation_invalid(){
+        val mockService = Mockito.mock(HistoryService::class.java)
+        Mockito.`when`(mockService.updateLocation(23)).thenReturn(true)
+
+        val controller = HistoryController(mockService)
+        controller.targetKey = "correct"
+        val result = controller.updateLocation(23, "wrong")
+
+        assertEquals(403, result.statusCodeValue);
+    }
+
+
+    /**
      * Tests the updateLocation method if the service believes the entry exists.
      */
     @Test
@@ -155,10 +171,12 @@ class HistoryControllerTest {
         Mockito.`when`(mockService.updateLocation(23)).thenReturn(true)
 
         val controller = HistoryController(mockService)
-        val result = controller.updateLocation(23);
+        controller.targetKey = "correct"
+        val result = controller.updateLocation(23, "correct")
 
         assertEquals(204, result.statusCodeValue);
     }
+
     /**
      * Tests the updateLocation method if the service believes the entry exists.
      */
@@ -168,7 +186,8 @@ class HistoryControllerTest {
         Mockito.`when`(mockService.updateLocation(23)).thenReturn(false)
 
         val controller = HistoryController(mockService)
-        val result = controller.updateLocation(23)
+        controller.targetKey = "correct"
+        val result = controller.updateLocation(23, "correct")
 
         assertEquals(422, result.statusCodeValue)
         assertEquals("No historical location with that id exists, so nothing was updated.", result.body)

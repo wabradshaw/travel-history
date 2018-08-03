@@ -145,4 +145,32 @@ class HistoryControllerTest {
         assertEquals(204, result.statusCodeValue)
         assertEquals(null, result.body)
     }
+
+    /**
+     * Tests the updateLocation method if the service believes the entry exists.
+     */
+    @Test
+    fun testUpdateLocation_exists(){
+        val mockService = Mockito.mock(HistoryService::class.java)
+        Mockito.`when`(mockService.updateLocation(23)).thenReturn(true)
+
+        val controller = HistoryController(mockService)
+        val result = controller.updateLocation(23);
+
+        assertEquals(204, result.statusCodeValue);
+    }
+    /**
+     * Tests the updateLocation method if the service believes the entry exists.
+     */
+    @Test
+    fun testUpdateLocation_doesntExist(){
+        val mockService = Mockito.mock(HistoryService::class.java)
+        Mockito.`when`(mockService.updateLocation(23)).thenReturn(false)
+
+        val controller = HistoryController(mockService)
+        val result = controller.updateLocation(23)
+
+        assertEquals(422, result.statusCodeValue)
+        assertEquals("No historical location with that id exists, so nothing was updated.", result.body)
+    }
 }

@@ -59,4 +59,12 @@ class HistoryService() {
                          ?.blog
 
     }
+
+    fun updateLocation(uuid: Int, startDate: DateTime? = null,
+                       endDate: DateTime? = null,
+                       name: String? = null,
+                       country: String? = null,
+                       timezone: Int? = null): Boolean {
+        return false
+    }
 }

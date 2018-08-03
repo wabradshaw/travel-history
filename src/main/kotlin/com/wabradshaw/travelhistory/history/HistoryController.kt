@@ -2,6 +2,7 @@ package com.wabradshaw.travelhistory.history
 
 import org.joda.time.DateTime
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -72,8 +73,10 @@ class HistoryController(val service: HistoryService) {
     @PatchMapping("/history/{uuid}")
     fun updateLocation(@PathVariable(value = "uuid") uuid: Int,
                        @RequestParam(value = "key") key: String,
-                       @RequestParam(value = "startDate", required = false) startDate: DateTime?  = null,
-                       @RequestParam(value = "endDate", required = false) endDate: DateTime? = null,
+                       @RequestParam(value = "startDate", required = false)
+                        @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ") startDate: DateTime?  = null,
+                       @RequestParam(value = "endDate", required = false)
+                        @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ") endDate: DateTime? = null,
                        @RequestParam(value = "name", required = false) name: String? = null,
                        @RequestParam(value = "country", required = false) country: String? = null,
                        @RequestParam(value = "timezone", required = false) timezone: Int? = null): ResponseEntity<String> {

@@ -2,11 +2,8 @@ package com.wabradshaw.travelhistory.history
 
 import com.wabradshaw.travelhistory.database.DatabaseConfiguration
 import com.wabradshaw.travelhistory.database.History
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.update
 import org.joda.time.DateTime
 import org.springframework.stereotype.Repository
 
@@ -40,6 +37,29 @@ class HistoryRepository(val db: DatabaseConfiguration) {
                                                                   row[History.mapUrl])
 
                                       }
+        }
+    }
+
+    /**
+     * Gets the LocationHistory for the row with the specific uuid stored within the database. Null if no such row
+     * exists.
+     */
+    fun getSpecificHistory(uuid: Int) : LocationHistory?{
+        connect();
+
+        return transaction{
+            return@transaction History.select({History.uuid.eq(uuid)})
+                    .map{row -> LocationHistory(row[History.uuid],
+                            row[History.startTime],
+                            row[History.endTime],
+                            row[History.name],
+                            row[History.country],
+                            row[History.timezone],
+                            getBlogPost(row[History.blogPostUrl], row[History.blogPostName]),
+                            row[History.mapUrl])
+
+                    }
+                    .firstOrNull()
         }
     }
 

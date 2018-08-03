@@ -60,11 +60,26 @@ class HistoryService() {
 
     }
 
-    fun updateLocation(uuid: Int, startDate: DateTime? = null,
+    /**
+     * Updates some or all of the information about a particular location.
+     */
+    fun updateLocation(uuid: Int,
+                       startDate: DateTime? = null,
                        endDate: DateTime? = null,
                        name: String? = null,
                        country: String? = null,
                        timezone: Int? = null): Boolean {
-        return false
+        val current = repository.getSpecificHistory(uuid);
+        if(current == null){
+            return false
+        } else {
+            if (startDate != null) repository.updateStartTime(uuid, startDate);
+            if (endDate != null) repository.updateEndTime(uuid, endDate);
+            if (name != null) repository.updateName(uuid, name);
+            if (country != null) repository.updateCountry(uuid, country);
+            if (timezone != null) repository.updateTimezone(uuid, timezone);
+
+            return true
+        }
     }
 }

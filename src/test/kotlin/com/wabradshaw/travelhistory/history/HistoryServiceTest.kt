@@ -3,7 +3,9 @@ package com.wabradshaw.travelhistory.history
 import org.joda.time.DateTime
 import org.junit.Assert
 import org.junit.Test
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
+import org.mockito.Mockito.*
 
 /**
  * A set of tests for the HistoryService
@@ -315,4 +317,184 @@ class HistoryServiceTest {
         Assert.assertEquals("blog2", result?.name)
     }
 
+    /**
+     * Tests the updateLocation function when the chosen location doesn't exist will return false.
+     */
+    @Test
+    fun testUpdateLocation_doesntExist(){
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getSpecificHistory(23)).thenReturn(null)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.updateLocation(23)
+
+        Assert.assertEquals(false, result)
+    }
+
+    /**
+     * Tests the updateLocation function when no changes were requested will return true, but not do anything.
+     */
+    @Test
+    fun testUpdateLocation_noChanges(){
+
+        val history = LocationHistory(23, DateTime.now(), null, "a", "a", 2)
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getSpecificHistory(23)).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.updateLocation(23)
+
+        verify(mockRepository).getSpecificHistory(23)
+        verifyNoMoreInteractions(mockRepository);
+
+        Assert.assertEquals(true, result)
+    }
+
+    /**
+     * Tests the updateLocation function when trying to change the start date.
+     */
+    @Test
+    fun testUpdateLocation_changeStart(){
+
+        val history = LocationHistory(23, DateTime.now(), null, "a", "a", 2)
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getSpecificHistory(23)).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val startDate = DateTime(0)
+        val result = service.updateLocation(23, startDate = startDate);
+
+        verify(mockRepository).getSpecificHistory(23)
+        verify(mockRepository).updateStartTime(23, startDate)
+        verifyNoMoreInteractions(mockRepository);
+
+        Assert.assertEquals(true, result)
+    }
+
+    /**
+     * Tests the updateLocation function when trying to change the end date.
+     */
+    @Test
+    fun testUpdateLocation_changeEnd(){
+
+        val history = LocationHistory(23, DateTime.now(), null, "a", "a", 2)
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getSpecificHistory(23)).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val endDate = DateTime(0)
+        val result = service.updateLocation(23, endDate = endDate);
+
+        verify(mockRepository).getSpecificHistory(23)
+        verify(mockRepository).updateEndTime(23, endDate)
+        verifyNoMoreInteractions(mockRepository);
+
+        Assert.assertEquals(true, result)
+    }
+
+    /**
+     * Tests the updateLocation function when trying to change the location name.
+     */
+    @Test
+    fun testUpdateLocation_changeName(){
+
+        val history = LocationHistory(23, DateTime.now(), null, "a", "a", 2)
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getSpecificHistory(23)).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.updateLocation(23, name = "bob");
+
+        verify(mockRepository).getSpecificHistory(23)
+        verify(mockRepository).updateName(23, "bob")
+        verifyNoMoreInteractions(mockRepository);
+
+        Assert.assertEquals(true, result)
+    }
+
+
+
+    /**
+     * Tests the updateLocation function when trying to change the country name.
+     */
+    @Test
+    fun testUpdateLocation_changeCountry(){
+
+        val history = LocationHistory(23, DateTime.now(), null, "a", "a", 2)
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getSpecificHistory(23)).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val endDate = DateTime(0)
+        val result = service.updateLocation(23, country = "dave");
+
+        verify(mockRepository).getSpecificHistory(23)
+        verify(mockRepository).updateCountry(23, "dave")
+        verifyNoMoreInteractions(mockRepository);
+
+        Assert.assertEquals(true, result)
+    }
+
+    /**
+     * Tests the updateLocation function when trying to change the timezone.
+     */
+    @Test
+    fun testUpdateLocation_changeTimezone(){
+
+        val history = LocationHistory(23, DateTime.now(), null, "a", "a", 2)
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getSpecificHistory(23)).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val endDate = DateTime(0)
+        val result = service.updateLocation(23, timezone = 5);
+
+        verify(mockRepository).getSpecificHistory(23)
+        verify(mockRepository).updateTimezone(23, 5)
+        verifyNoMoreInteractions(mockRepository);
+
+        Assert.assertEquals(true, result)
+    }
+
+    /**
+     * Tests the updateLocation function when trying to change multiple aspects of the location.
+     */
+    @Test
+    fun testUpdateLocation_changeMultiple(){
+
+        val history = LocationHistory(23, DateTime.now(), null, "a", "a", 2)
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getSpecificHistory(23)).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val date = DateTime(0)
+        val result = service.updateLocation(23, startDate = date, endDate = date, name="bob", country = "dave", timezone = 5);
+
+        verify(mockRepository).getSpecificHistory(23)
+        verify(mockRepository).updateStartTime(23, date)
+        verify(mockRepository).updateEndTime(23, date)
+        verify(mockRepository).updateName(23, "bob")
+        verify(mockRepository).updateCountry(23, "dave")
+        verify(mockRepository).updateTimezone(23, 5)
+        verifyNoMoreInteractions(mockRepository);
+
+        Assert.assertEquals(true, result)
+    }
 }

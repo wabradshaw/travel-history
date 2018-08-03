@@ -72,4 +72,41 @@ class HistoryControllerTest {
         assertEquals(204, result.statusCodeValue)
         assertEquals(null, result.body)
     }
+
+    /**
+     * Tests the getNextLocation method if that information is known.
+     */
+    @Test
+    fun testGetNextLocation_hasOne(){
+        val target = LocationHistory(DateTime(0),
+                DateTime(1),
+                "Sarande",
+                "Albania",
+                2)
+
+        val mockService = Mockito.mock(HistoryService::class.java)
+        Mockito.`when`(mockService.getNextLocation()).thenReturn(target)
+
+        val controller = HistoryController(mockService)
+        val result = controller.getNextLocation()
+
+        assertEquals(200, result.statusCodeValue)
+        assertEquals(target, result.body)
+    }
+
+    /**
+     * Tests the getNextLocation method if that information is missing.
+     */
+    @Test
+    fun testGetNextLocation_unknown(){
+
+        val mockService = Mockito.mock(HistoryService::class.java)
+        Mockito.`when`(mockService.getNextLocation()).thenReturn(null)
+
+        val controller = HistoryController(mockService)
+        val result = controller.getNextLocation()
+
+        assertEquals(204, result.statusCodeValue)
+        assertEquals(null, result.body)
+    }
 }

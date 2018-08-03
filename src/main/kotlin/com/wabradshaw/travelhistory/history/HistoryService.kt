@@ -35,4 +35,16 @@ class HistoryService() {
                          .firstOrNull()
 
     }
+
+    /**
+     * Gets the location the person is planning to be in next, if they've planned that far ahead.
+     */
+    fun getNextLocation(): LocationHistory? {
+        val allHistory = repository.getAllHistory()
+
+        return allHistory.filter { it.startTime > DateTime.now() }
+                         .sortedBy { it.startTime }
+                         .firstOrNull()
+
+    }
 }

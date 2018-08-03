@@ -20,13 +20,27 @@ class HistoryController(val service: HistoryService){
     }
 
     /**
-     * Gets the location the person is currently in. If there isn't an entry for the current location
+     * Gets the location the person is currently in. If there isn't an entry for the current location, this will return
+     * null.
      */
     @GetMapping("/history/current")
     fun getCurrentLocation(): ResponseEntity<LocationHistory?> {
         val currentLocation = service.getCurrentLocation();
         if(currentLocation != null) {
             return ResponseEntity.ok(currentLocation);
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+    }
+
+    /**
+     * Gets the location the person is planning to be in next. Null if the plan is not yet known.
+     */
+    @GetMapping("/history/next")
+    fun getNextLocation(): ResponseEntity<LocationHistory?> {
+        val nextLocation = service.getNextLocation();
+        if(nextLocation != null) {
+            return ResponseEntity.ok(nextLocation);
         } else {
             return ResponseEntity.noContent().build();
         }

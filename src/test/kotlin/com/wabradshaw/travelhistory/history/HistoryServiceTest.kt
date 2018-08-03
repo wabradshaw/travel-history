@@ -154,4 +154,85 @@ class HistoryServiceTest {
 
         Assert.assertEquals("b", result?.name)
     }
+
+    /**
+     * Tests getNextLocation when the repository doesn't contain any history will return null.
+     */
+    @Test
+    fun testGetNextLocation_NoHistory() {
+
+        val history = emptyList<LocationHistory>()
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getNextLocation()
+
+        Assert.assertEquals(null, result)
+    }
+
+    /**
+     * Tests getNextLocation when the repository only contains entries in the past/present will return null.
+     */
+    @Test
+    fun testGetNextLocation_TooLate() {
+
+        val history = listOf(LocationHistory(DateTime.now().plusDays(-1), null, "a","a", 1),
+                                                LocationHistory(DateTime.now().plusDays(-5), null, "b","b", 1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getNextLocation()
+
+        Assert.assertEquals(null, result)
+    }
+
+    /**
+     * Tests getNextLocation when the repository contains one more location will return that.
+     */
+    @Test
+    fun testGetNextLocation_OneNext() {
+
+        val history = listOf(LocationHistory(DateTime.now().plusDays(1), null, "a","a", 1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getNextLocation()
+
+        Assert.assertEquals("a", result?.name)
+    }
+
+
+    /**
+     * Tests getNextLocation when the repository contains several more locations will return the earliest.
+     */
+    @Test
+    fun testGetNextLocation_MultipleNext() {
+
+        val history = listOf(LocationHistory(DateTime.now().plusDays(3), null, "a","a", 1),
+                                                LocationHistory(DateTime.now().plusDays(1), null, "b","b", 1),
+                                                LocationHistory(DateTime.now().plusDays(5), null, "c","c", 1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getNextLocation()
+
+        Assert.assertEquals("b", result?.name)
+    }
+
 }

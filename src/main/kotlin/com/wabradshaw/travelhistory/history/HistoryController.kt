@@ -1,5 +1,6 @@
 package com.wabradshaw.travelhistory.history
 
+import com.wabradshaw.travelhistory.database.History.uuid
 import org.joda.time.DateTime
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.format.annotation.DateTimeFormat
@@ -62,6 +63,23 @@ class HistoryController(val service: HistoryService) {
         } else {
             return ResponseEntity.noContent().build();
         }
+    }
+
+    @PostMapping("/history")
+    fun addTrip(@RequestParam(value="key") key: String,
+                @RequestParam(value="startDate")
+                    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ") startDate: DateTime,
+                @RequestParam(value="endDate", required = false)
+                    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ") endDate: DateTime?,
+                @RequestParam(value="startDate") name: String,
+                @RequestParam(value="country") country: String?,
+                @RequestParam(value="timezone") timezone: Int?): ResponseEntity<String>{
+
+        if(invalidKey(key)) return ResponseEntity("Invalid authentication key for this request.", HttpStatus.FORBIDDEN)
+
+        service.addTrip(startDate, endDate, name, country, timezone);
+
+        return ResponseEntity.noContent().build();
     }
 
     /**

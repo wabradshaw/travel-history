@@ -4,6 +4,8 @@ import org.joda.time.DateTime
 import org.junit.Test
 import org.junit.Assert.assertEquals
 import org.mockito.Mockito
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.verifyZeroInteractions
 
 /**
  * A set of tests for the HistoryController
@@ -147,6 +149,38 @@ class HistoryControllerTest {
     }
 
     /**
+     * Tests the addTrip method if the user has supplied an incorrect authentication key
+     */
+    @Test
+    fun testAddTrip_invalid(){
+        val mockService = Mockito.mock(HistoryService::class.java)
+
+        val controller = HistoryController(mockService)
+        controller.targetKey = "correct"
+        val result = controller.addTrip("wrong", DateTime(0), DateTime(1), "a", "b", 5)
+
+        verifyZeroInteractions(mockService);
+
+        assertEquals(403, result.statusCodeValue);
+    }
+
+    /**
+     * Tests the addTrip method if the user has supplied a correct authentication key
+     */
+    @Test
+    fun testAddTrip_valid(){
+        val mockService = Mockito.mock(HistoryService::class.java)
+
+        val controller = HistoryController(mockService)
+        controller.targetKey = "correct"
+        val result = controller.addTrip("correct", DateTime(0), DateTime(1), "a", "b", 5)
+
+        verify(mockService).addTrip(DateTime(0), DateTime(1), "a", "b", 5)
+
+        assertEquals(204, result.statusCodeValue);
+    }
+
+    /**
      * Tests the updateLocation method if the user has supplied an incorrect authentication key
      */
     @Test
@@ -160,7 +194,6 @@ class HistoryControllerTest {
 
         assertEquals(403, result.statusCodeValue);
     }
-
 
     /**
      * Tests the updateLocation method if the service believes the entry exists.

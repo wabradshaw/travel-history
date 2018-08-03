@@ -82,4 +82,6 @@ class HistoryService() {
             return true
         }
     }
+
+    fun addTrip(startDate: DateTime, endDate: DateTime?, name: String, country: String?, timezone: Int?) {}
 }

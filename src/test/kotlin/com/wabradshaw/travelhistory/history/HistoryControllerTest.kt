@@ -16,13 +16,14 @@ class HistoryControllerTest {
     @Test
     fun testGetCompleteHistory() {
 
-        val target = listOf(LocationHistory(DateTime(0),
-                DateTime(1),
-                "Tirana",
-                "Albania",
-                2,
-                BlogPost("https://example.com", "Tirana"),
-                "https://example2.com"))
+        val target = listOf(LocationHistory(1,
+                                               DateTime(0),
+                                               DateTime(1),
+                                               "Tirana",
+                                               "Albania",
+                                               2,
+                                               BlogPost("https://example.com", "Tirana"),
+                                               "https://example2.com"))
 
         val mockService = Mockito.mock(HistoryService::class.java)
         Mockito.`when`(mockService.getCompleteHistory()).thenReturn(target)
@@ -39,13 +40,14 @@ class HistoryControllerTest {
      */
     @Test
     fun testGetCurrentLocation_hasOne(){
-        val target = LocationHistory(DateTime(0),
-                DateTime(1),
-                "Tirana",
-                "Albania",
-                2,
-                BlogPost("https://example.com", "Tirana"),
-                "https://example2.com")
+        val target = LocationHistory(1,
+                                     DateTime(0),
+                                     DateTime(1),
+                                     "Tirana",
+                                     "Albania",
+                                     2,
+                                     BlogPost("https://example.com", "Tirana"),
+                                     "https://example2.com")
 
         val mockService = Mockito.mock(HistoryService::class.java)
         Mockito.`when`(mockService.getCurrentLocation()).thenReturn(target)
@@ -78,11 +80,12 @@ class HistoryControllerTest {
      */
     @Test
     fun testGetNextLocation_hasOne(){
-        val target = LocationHistory(DateTime(0),
-                DateTime(1),
-                "Sarande",
-                "Albania",
-                2)
+        val target = LocationHistory(1,
+                                     DateTime(0),
+                                     DateTime(1),
+                                     "Sarande",
+                                     "Albania",
+                                     2)
 
         val mockService = Mockito.mock(HistoryService::class.java)
         Mockito.`when`(mockService.getNextLocation()).thenReturn(target)

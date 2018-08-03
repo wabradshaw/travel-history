@@ -29,7 +29,8 @@ class HistoryRepository(val db: DatabaseConfiguration) {
         return transaction{
             SchemaUtils.create(History)
             return@transaction History.selectAll()
-                                      .map{row -> LocationHistory(row[History.startTime],
+                                      .map{row -> LocationHistory(row[History.uuid],
+                                                                  row[History.startTime],
                                                                   row[History.endTime],
                                                                   row[History.name],
                                                                   row[History.country],

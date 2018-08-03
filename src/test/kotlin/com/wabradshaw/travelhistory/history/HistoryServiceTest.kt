@@ -16,7 +16,8 @@ class HistoryServiceTest {
     @Test
     fun testGetCompleteHistory() {
 
-        val target = listOf(LocationHistory(DateTime(0),
+        val target = listOf(LocationHistory(1,
+                DateTime(0),
                 DateTime(1),
                 "Tirana",
                 "Albania",
@@ -60,8 +61,8 @@ class HistoryServiceTest {
     @Test
     fun testGetCurrentLocation_TooEarly() {
 
-        val history = listOf(LocationHistory(DateTime.now().plusDays(1), null, "a","a", 1),
-                                                LocationHistory(DateTime.now().plusDays(5), null, "b","b", 1))
+        val history = listOf(LocationHistory(1, DateTime.now().plusDays(1), null, "a","a", 1),
+                                                LocationHistory(2, DateTime.now().plusDays(5), null, "b","b", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
@@ -80,8 +81,8 @@ class HistoryServiceTest {
     @Test
     fun testGetCurrentLocation_AllComplete() {
 
-        val history = listOf(LocationHistory(DateTime.now().plusDays(-10), DateTime.now().plusDays(-5), "a","a", 1),
-                                                LocationHistory(DateTime.now().plusDays(-5), DateTime.now().plusDays(-1), "b","b", 1))
+        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-10), DateTime.now().plusDays(-5), "a","a", 1),
+                                                LocationHistory(2, DateTime.now().plusDays(-5), DateTime.now().plusDays(-1), "b","b", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
@@ -100,7 +101,7 @@ class HistoryServiceTest {
     @Test
     fun testGetCurrentLocation_OneOngoing_UnknownEnd() {
 
-        val history = listOf(LocationHistory(DateTime.now().plusDays(-10), null, "a","a", 1))
+        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-10), null, "a","a", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
@@ -120,7 +121,7 @@ class HistoryServiceTest {
     @Test
     fun testGetCurrentLocation_OneOngoing_KnownEnd() {
 
-        val history = listOf(LocationHistory(DateTime.now().plusDays(-10), DateTime.now().plusDays(10), "a","a", 1))
+        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-10), DateTime.now().plusDays(10), "a","a", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
@@ -140,9 +141,9 @@ class HistoryServiceTest {
     @Test
     fun testGetCurrentLocation_MultipleOngoing() {
 
-        val history = listOf(LocationHistory(DateTime.now().plusDays(-10), DateTime.now().plusDays(10), "a","a", 1),
-                LocationHistory(DateTime.now().plusDays(-4), null, "b","b", 1),
-                LocationHistory(DateTime.now().plusDays(-7), null, "c","c", 1))
+        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-10), DateTime.now().plusDays(10), "a","a", 1),
+                LocationHistory(2, DateTime.now().plusDays(-4), null, "b","b", 1),
+                LocationHistory(3, DateTime.now().plusDays(-7), null, "c","c", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
@@ -180,8 +181,8 @@ class HistoryServiceTest {
     @Test
     fun testGetNextLocation_TooLate() {
 
-        val history = listOf(LocationHistory(DateTime.now().plusDays(-1), null, "a","a", 1),
-                                                LocationHistory(DateTime.now().plusDays(-5), null, "b","b", 1))
+        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-1), null, "a","a", 1),
+                                                LocationHistory(2, DateTime.now().plusDays(-5), null, "b","b", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
@@ -200,7 +201,7 @@ class HistoryServiceTest {
     @Test
     fun testGetNextLocation_OneNext() {
 
-        val history = listOf(LocationHistory(DateTime.now().plusDays(1), null, "a","a", 1))
+        val history = listOf(LocationHistory(1, DateTime.now().plusDays(1), null, "a","a", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
@@ -220,9 +221,9 @@ class HistoryServiceTest {
     @Test
     fun testGetNextLocation_MultipleNext() {
 
-        val history = listOf(LocationHistory(DateTime.now().plusDays(3), null, "a","a", 1),
-                                                LocationHistory(DateTime.now().plusDays(1), null, "b","b", 1),
-                                                LocationHistory(DateTime.now().plusDays(5), null, "c","c", 1))
+        val history = listOf(LocationHistory(1, DateTime.now().plusDays(3), null, "a","a", 1),
+                                                LocationHistory(2, DateTime.now().plusDays(1), null, "b","b", 1),
+                                                LocationHistory(3, DateTime.now().plusDays(5), null, "c","c", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
@@ -260,8 +261,8 @@ class HistoryServiceTest {
     @Test
     fun testGetLatestBlogPost_noBlogPosts() {
 
-        val history = listOf(LocationHistory(DateTime.now().plusDays(-10), DateTime.now().plusDays(-5), "a","a", 1),
-                                                LocationHistory(DateTime.now().plusDays(-5), DateTime.now().plusDays(-1), "b","b", 1))
+        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-10), DateTime.now().plusDays(-5), "a","a", 1),
+                                                LocationHistory(2, DateTime.now().plusDays(-5), DateTime.now().plusDays(-1), "b","b", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
@@ -280,7 +281,7 @@ class HistoryServiceTest {
     @Test
     fun testGetLatestBlogPost_oneBlogPost() {
 
-        val history = listOf(LocationHistory(DateTime.now().plusDays(-10), DateTime.now().plusDays(-5), "a","a", 1, BlogPost("https://example.com","blog1")))
+        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-10), DateTime.now().plusDays(-5), "a","a", 1, BlogPost("https://example.com","blog1")))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
@@ -299,9 +300,9 @@ class HistoryServiceTest {
     @Test
     fun testGetLatestBlogPost_multipleBlogPost() {
 
-        val history = listOf(LocationHistory(DateTime.now().plusDays(-10), DateTime.now().plusDays(-5), "a","a", 1, BlogPost("https://example.com","blog1")),
-                                                LocationHistory(DateTime.now().plusDays(-3), DateTime.now().plusDays(-5), "b","b", 1, BlogPost("https://example.com","blog2")),
-                                                LocationHistory(DateTime.now().plusDays(-6), DateTime.now().plusDays(-5), "c","c", 1, BlogPost("https://example.com","blog3")))
+        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-10), DateTime.now().plusDays(-5), "a","a", 1, BlogPost("https://example.com","blog1")),
+                                                LocationHistory(2, DateTime.now().plusDays(-3), DateTime.now().plusDays(-5), "b","b", 1, BlogPost("https://example.com","blog2")),
+                                                LocationHistory(3, DateTime.now().plusDays(-6), DateTime.now().plusDays(-5), "c","c", 1, BlogPost("https://example.com","blog3")))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)

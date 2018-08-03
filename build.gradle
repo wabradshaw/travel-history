@@ -6,6 +6,7 @@ buildscript {
     ext.spring_boot_version = '1.5.4.RELEASE'
     ext.exposed_version = '0.10.3'
     ext.mariadb_version = '2.2.5'
+    ext.mockito_version = '2.21.0'
 
     repositories {
         mavenCentral()
@@ -51,7 +52,9 @@ dependencies {
     testCompile "org.springframework.boot:spring-boot-starter-test:$spring_boot_version"
     compile "org.jetbrains.exposed:exposed:$exposed_version"
     compile "org.mariadb.jdbc:mariadb-java-client:$mariadb_version"
+    testCompile "org.mockito:mockito-core:$mockito_version"
 }
+
 
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"

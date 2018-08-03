@@ -18,5 +18,5 @@ data class LocationHistory(val startTime: DateTime,
                            val name: String,
                            val country: String,
                            val timezone: Int,
-                           val blog: BlogPost?,
-                           val mapUrl: String?)
+                           val blog: BlogPost? = null,
+                           val mapUrl: String? = null)

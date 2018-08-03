@@ -1,5 +1,6 @@
 package com.wabradshaw.travelhistory.history
 
+import org.joda.time.DateTime
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.GetMapping
@@ -27,6 +28,11 @@ class HistoryService() {
     fun getCurrentLocation(): LocationHistory? {
         val allHistory = repository.getAllHistory()
 
-        return allHistory.get(0);
+        return allHistory.filter { it.startTime < DateTime.now() }
+                         .filter { it.endTime == null || DateTime.now().isBefore(it.endTime) }
+                         .sortedBy { it.startTime }
+                         .reversed()
+                         .firstOrNull()
+
     }
 }

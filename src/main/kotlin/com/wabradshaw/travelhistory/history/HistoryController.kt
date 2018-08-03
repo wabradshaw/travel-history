@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController
  * The HistoryController is the class which provides a RESTful endpoints for viewing the saved location history.
  */
 @RestController
-class HistoryController(val service: HistoryService = HistoryService()){
+class HistoryController(val service: HistoryService){
 
     /**
      * Gets the list of all locations that have been visited.

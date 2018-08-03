@@ -11,7 +11,7 @@ import org.joda.time.DateTime
  * @property country The country the place is in.
  * @property timezone The timezone offset from UTC.
  * @property blog The blog post describing your experiences in this place, or null if not written yet.
- * @property mapURL The URL for an image of a map of where you were. Can be null.
+ * @property mapUrl The URL for an image of a map of where you were. Can be null.
  */
 data class LocationHistory(val startTime: DateTime,
                            var endTime: DateTime?,

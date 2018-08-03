@@ -17,8 +17,16 @@ class HistoryService() {
     /**
      * Gets the list of all of the locations that a person has visited.
      */
-    @GetMapping("/history")
     fun getCompleteHistory(): List<LocationHistory> {
         return repository.getAllHistory()
+    }
+
+    /**
+     * Gets the location the person is currently in.
+     */
+    fun getCurrentLocation(): LocationHistory? {
+        val allHistory = repository.getAllHistory()
+
+        return allHistory.get(0);
     }
 }

@@ -1,0 +1,12 @@
+CREATE TABLE `history` (
+	`uuid` INT(11) NOT NULL AUTO_INCREMENT,
+	`start_time` DATETIME(6) NOT NULL,
+	`end_time` DATETIME(6) NULL DEFAULT NULL,
+	`name` VARCHAR(600) NOT NULL,
+	`country` VARCHAR(600) NOT NULL,
+	`timezone_offset` INT(11) NOT NULL,
+	`blog_post_url` VARCHAR(6000) NULL DEFAULT NULL,
+	`blog_post_name` VARCHAR(6000) NULL DEFAULT NULL,
+	`map_url` VARCHAR(6000) NULL DEFAULT NULL,
+	PRIMARY KEY (`uuid`)
+)

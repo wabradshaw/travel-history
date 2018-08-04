@@ -172,6 +172,20 @@ class HistoryRepository(val db: DatabaseConfiguration) {
     }
 
     /**
+     * Adds a map to a location in the database
+     * @param uuid The unique id of the location history to update
+     * @param urlVal The URL for the map image
+     */
+    fun addMap(uuid: Int, urlVal: String) {
+        connect()
+        transaction{
+            History.update({History.uuid.eq(uuid)}){
+                it[mapUrl] = urlVal
+            }
+        }
+    }
+
+    /**
      * A helper method that creates a BlogPost from a name and a url, provided they are both non-null. Null if either
      * was null.
      * @param url The URL pointing to the hosted blog post

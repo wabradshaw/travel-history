@@ -132,6 +132,19 @@ class HistoryService() {
     }
 
     /**
+     * Adds a new map to the chosen trip.
+     */
+    fun addMap(uuid: Int, url: String): Boolean {
+        val current = repository.getSpecificHistory(uuid);
+        if(current == null){
+            return false
+        } else {
+            repository.addMap(uuid, url)
+            return true;
+        }
+    }
+
+    /**
      * Finishes any trips which were unfinished that started before the given startDate.
      */
     private fun finishEarlierTrips(startDate: DateTime, existingTrips: List<LocationHistory>) {

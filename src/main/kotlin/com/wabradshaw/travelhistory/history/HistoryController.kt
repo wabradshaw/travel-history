@@ -139,6 +139,21 @@ class HistoryController(val service: HistoryService) {
         }
     }
 
+    @PutMapping("/history/{uuid}/map")
+    fun addMap(@PathVariable(value = "uuid") uuid: Int,
+                    @RequestParam(value = "key") key: String,
+                    @RequestParam(value = "url") url: String): ResponseEntity<String>{
+
+        if(invalidKey(key)) return ResponseEntity("Invalid authentication key for this request.", HttpStatus.FORBIDDEN)
+
+        val exists = service.addMap(uuid, url);
+        if (exists) {
+            return ResponseEntity.noContent().build()
+        } else {
+            return ResponseEntity.unprocessableEntity().body("No historical location with that id exists, so nothing was updated.");
+        }
+    }
+
     /**
      * Checks to see if the user supplied authentication key matches the server's authentication key.
      * @param key The user supplied authentication key.

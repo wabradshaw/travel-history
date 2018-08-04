@@ -231,6 +231,58 @@ class HistoryControllerTest {
         assertEquals("No historical location with that id exists, so nothing was updated.", result.body)
     }
 
+
+    /**
+     * Tests the addMap method if the user has supplied an incorrect authentication key
+     */
+    @Test
+    fun testAddMap_invalid(){
+        val mockService = Mockito.mock(HistoryService::class.java)
+
+        val controller = HistoryController(mockService)
+        controller.targetKey = "correct"
+        val result = controller.addMap(23, "wrong", "https://example.com")
+
+        verifyZeroInteractions(mockService);
+
+        assertEquals(403, result.statusCodeValue);
+    }
+
+    /**
+     * Tests the addMap method if the user has supplied a correct authentication key, and the location exists.
+     */
+    @Test
+    fun testAddMap_valid(){
+        val mockService = Mockito.mock(HistoryService::class.java)
+        Mockito.`when`(mockService.addMap(23, "https://example.com")).thenReturn(true)
+
+        val controller = HistoryController(mockService)
+        controller.targetKey = "correct"
+        val result = controller.addMap(23, "correct", "https://example.com")
+
+        verify(mockService).addMap(23, "https://example.com")
+
+        assertEquals(204, result.statusCodeValue);
+    }
+
+    /**
+     * Tests the addMap method if the user has supplied a correct authentication key, but the location doesn't exist.
+     */
+    @Test
+    fun testAddMap_doesntExist(){
+        val mockService = Mockito.mock(HistoryService::class.java)
+        Mockito.`when`(mockService.addMap(23, "https://example.com")).thenReturn(false)
+
+        val controller = HistoryController(mockService)
+        controller.targetKey = "correct"
+        val result = controller.addMap(23, "correct", "https://example.com")
+
+        verify(mockService).addMap(23, "https://example.com")
+
+        assertEquals(422, result.statusCodeValue)
+        assertEquals("No historical location with that id exists, so nothing was updated.", result.body)
+    }
+
     /**
      * Tests the updateLocation method if the user has supplied an incorrect authentication key
      */

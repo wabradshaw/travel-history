@@ -64,6 +64,28 @@ class HistoryRepository(val db: DatabaseConfiguration) {
     }
 
     /**
+     * Inserts the specified trip into the database.
+     * @param startDate The dateTime when the trip started.
+     * @param endDate The dateTime when the user will move on from the trip. Null if that isn't known yet.
+     * @param name The name of the location for the trip.
+     * @param country The name of the country the trip is in.
+     * @param timezone The timezone offset for the location.
+     */
+    fun addTrip(startTimeVal: DateTime, endTimeVal: DateTime?, nameVal: String, countryVal: String, timezoneVal: Int){
+        connect();
+
+        transaction{
+            History.insert{
+                it[startTime] = startTimeVal
+                it[endTime] = endTimeVal
+                it[name] = nameVal
+                it[country] = countryVal
+                it[timezone] = timezoneVal
+            }
+        }
+    }
+
+    /**
      * Updates the start time of a location in the database
      * @param uuid The unique id of the location history to update
      * @param startTimeVal The new startTime describing when the user visited the location

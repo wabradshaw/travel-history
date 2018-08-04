@@ -65,15 +65,29 @@ class HistoryController(val service: HistoryService) {
         }
     }
 
+    /**
+     * Adds a new trip to the location history. If this trip is after the current trip, this will also make sure that
+     * the current trip is complete.
+     *
+     * @param key The unique key required to make any write operations on this database.
+     * @param startDate The dateTime when the trip started.
+     * @param endDate The dateTime when the user will move on from the trip. Null if that isn't known yet.
+     * @param name The name of the location for the trip.
+     * @param country The name of the country the trip is in. If this is null, the name of the latest trip will be
+     *                used.
+     * @param timezone The timezone offset for the location. If this is null, the name of the latest trip will be
+     *                used.
+     * TODO: Change this to use a request body, rather than individual request params.
+     */
     @PostMapping("/history")
     fun addTrip(@RequestParam(value="key") key: String,
                 @RequestParam(value="startDate")
                     @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ") startDate: DateTime,
                 @RequestParam(value="endDate", required = false)
                     @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ") endDate: DateTime?,
-                @RequestParam(value="startDate") name: String,
-                @RequestParam(value="country") country: String?,
-                @RequestParam(value="timezone") timezone: Int?): ResponseEntity<String>{
+                @RequestParam(value="name") name: String,
+                @RequestParam(value="country", required = false) country: String?,
+                @RequestParam(value="timezone", required = false) timezone: Int?): ResponseEntity<String>{
 
         if(invalidKey(key)) return ResponseEntity("Invalid authentication key for this request.", HttpStatus.FORBIDDEN)
 

@@ -3,7 +3,6 @@ package com.wabradshaw.travelhistory.history
 import org.joda.time.DateTime
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import org.springframework.web.bind.annotation.GetMapping
 
 /**
  * The HistoryService serves as the intermediary between the database layer and the frontend when getting information
@@ -47,6 +46,17 @@ class HistoryService() {
     }
 
     /**
+     * Gets the location the person was in, or is currently in, before the target date.
+     */
+    fun getPreviousLocation(targetDate: DateTime): LocationHistory? {
+        val allHistory = repository.getAllHistory()
+
+        return allHistory.filter { it.startTime < targetDate }
+                         .sortedBy { it.startTime }
+                         .lastOrNull()
+    }
+
+    /**
      * Gets the blog post for the most recent location the person has visited and written about. Null if the person
      * hasn't written any blog posts.
      */
@@ -57,7 +67,6 @@ class HistoryService() {
                          .sortedBy { it.startTime }
                          .lastOrNull()
                          ?.blog
-
     }
 
     /**
@@ -83,5 +92,40 @@ class HistoryService() {
         }
     }
 
-    fun addTrip(startDate: DateTime, endDate: DateTime?, name: String, country: String?, timezone: Int?) {}
+    /**
+     * Adds a new trip to the location history. If this trip is after the current trip, this will also make sure that
+     * the current trip is complete.
+     *
+     * @param startDate The dateTime when the trip started.
+     * @param endDate The dateTime when the user will move on from the trip. Null if that isn't known yet.
+     * @param name The name of the location for the trip.
+     * @param country The name of the country the trip is in. If this is null, the name of the latest trip will be
+     *                used.
+     * @param timezone The timezone offset for the location. If this is null, the name of the latest trip will be
+     *                used.
+     */
+    fun addTrip(startDate: DateTime, endDate: DateTime?, name: String, country: String?, timezone: Int?) {
+        val existingTrips = getCompleteHistory();
+
+        finishEarlierTrips(startDate, existingTrips);
+
+        val previousLocation = getPreviousLocation(startDate);
+
+        repository.addTrip(startDate,
+                           endDate,
+                           name,
+                           country ?: previousLocation?.country ?: "unknown",
+                           timezone ?:  previousLocation?.timezone ?: 0)
+    }
+
+    /**
+     * Finishes any trips which were unfinished that started before the given startDate.
+     */
+    private fun finishEarlierTrips(startDate: DateTime, existingTrips: List<LocationHistory>) {
+        existingTrips.filter{it.endTime == null}
+                     .filter{it.startTime < startDate}
+                     .forEach{
+                        repository.updateEndTime(it.uuid, startDate)
+                     }
+    }
 }

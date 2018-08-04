@@ -3,7 +3,6 @@ package com.wabradshaw.travelhistory.history
 import org.joda.time.DateTime
 import org.junit.Assert
 import org.junit.Test
-import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import org.mockito.Mockito.*
 
@@ -239,6 +238,86 @@ class HistoryServiceTest {
     }
 
     /**
+     * Tests getPreviousLocation when the repository doesn't contain any history will return null.
+     */
+    @Test
+    fun testGetPreviousLocation_NoHistory() {
+
+        val history = emptyList<LocationHistory>()
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(emptyList())
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getPreviousLocation(DateTime.now())
+
+        Assert.assertEquals(null, result)
+    }
+
+    /**
+     * Tests getPreviousLocation when the repository only contains entries in the future will return null.
+     */
+    @Test
+    fun testGetPreviousLocation_OnlyFuture() {
+
+        val history = listOf(LocationHistory(1, DateTime(100), null, "a","a", 1),
+                                                LocationHistory(2, DateTime(200), null, "b","b", 1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getPreviousLocation(DateTime(0))
+
+        Assert.assertEquals(null, result)
+    }
+
+    /**
+     * Tests getPreviousLocation when the repository contains one more location will return that.
+     */
+    @Test
+    fun testGetPreviousLocation_OnePrevious() {
+
+        val history = listOf(LocationHistory(1, DateTime(0), null, "a","a", 1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getPreviousLocation(DateTime(100))
+
+        Assert.assertEquals("a", result?.name)
+    }
+
+
+    /**
+     * Tests getPreviousLocation when the repository contains several more locations will return the latest.
+     */
+    @Test
+    fun testGetPreviousLocation_MultiplePrevious() {
+
+        val history = listOf(LocationHistory(1, DateTime(300), null, "a","a", 1),
+                                                LocationHistory(2, DateTime(500), null, "b","b", 1),
+                                                LocationHistory(3, DateTime(400), null, "c","c", 1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getPreviousLocation(DateTime(700))
+
+        Assert.assertEquals("b", result?.name)
+    }
+
+    /**
      * Tests getLatestBlogPost when the repository doesn't contain any history will return null.
      */
     @Test
@@ -317,6 +396,199 @@ class HistoryServiceTest {
         Assert.assertEquals("blog2", result?.name)
     }
 
+    /**
+     * Tests calling addTrip with all possible information.
+     */
+    @Test
+    fun testAddTrip_allKnown(){
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(emptyList())
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        service.addTrip(DateTime(100), DateTime(200), "a", "b", 2);
+
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "a", "b", 2)
+    }
+
+    /**
+     * Tests calling addTrip missing a country name, but without a history, will use unknown.
+     */
+    @Test
+    fun testAddTrip_unknownCountry_noHistory(){
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(emptyList())
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        service.addTrip(DateTime(100), DateTime(200), "a", null, 2);
+
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "a", "unknown", 2)
+    }
+
+    /**
+     * Tests calling addTrip missing a country name, but without anything in the past of the history, will use unknown.
+     */
+    @Test
+    fun testAddTrip_unknownCountry_futureHistory(){
+
+        val history = listOf(LocationHistory(1, DateTime(500), null, "z", "future", 1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        service.addTrip(DateTime(100), DateTime(200), "a", null, 2);
+
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "a", "unknown", 2)
+    }
+
+    /**
+     * Tests calling addTrip missing a country name, with a previous location will use its country.
+     */
+    @Test
+    fun testAddTrip_unknownCountry_onePastHistory(){
+
+        val history = listOf(LocationHistory(1, DateTime(50), null, "z", "past", 1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        service.addTrip(DateTime(100), DateTime(200), "a", null, 2);
+
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "a", "past", 2)
+    }
+
+    /**
+     * Tests calling addTrip missing a country name, with multiple previous locations will use the country of the most recent
+     */
+    @Test
+    fun testAddTrip_unknownCountry_multiplePastHistory(){
+
+        val history = listOf(LocationHistory(1, DateTime(50), null, "z", "paster", 1),
+                                                LocationHistory(2, DateTime(75), null, "y", "past", 1),
+                                                LocationHistory(3, DateTime(25), null, "x", "pastest", 1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        service.addTrip(DateTime(100), DateTime(200), "a", null, 2);
+
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "a", "past", 2)
+    }
+
+    /**
+     * Tests calling addTrip missing a timezone, but without a history, will use 0.
+     */
+    @Test
+    fun testAddTrip_unknownTimezone_noHistory(){
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(emptyList())
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        service.addTrip(DateTime(100), DateTime(200), "a", "b", null);
+
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "a", "b", 0)
+    }
+
+    /**
+     * Tests calling addTrip missing a timezone, but without anything in the past of the history, will use 0.
+     */
+    @Test
+    fun testAddTrip_unknownTimezone_futureHistory(){
+
+        val history = listOf(LocationHistory(1, DateTime(500), null, "z", "future", 1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        service.addTrip(DateTime(100), DateTime(200), "a", "b", null);
+
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "a", "b", 0)
+    }
+
+    /**
+     * Tests calling addTrip missing a timezone, with a previous location will use its timezone.
+     */
+    @Test
+    fun testAddTrip_unknownTimezone_onePastHistory(){
+
+        val history = listOf(LocationHistory(1, DateTime(50), null, "z", "past", 1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        service.addTrip(DateTime(100), DateTime(200), "a", "b", null);
+
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "a", "b", 1)
+    }
+
+    /**
+     * Tests calling addTrip missing a timezone, with multiple previous locations will use the country of the most recent
+     */
+    @Test
+    fun testAddTrip_unknownTimezone_multiplePastHistory(){
+
+        val history = listOf(LocationHistory(1, DateTime(50), null, "z", "paster", 1),
+                                                LocationHistory(2, DateTime(75), null, "y", "past", 2),
+                                                LocationHistory(3, DateTime(25), null, "x", "pastest", 3))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        service.addTrip(DateTime(100), DateTime(200), "a", "b", null);
+
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "a", "b", 2)
+    }
+
+    /**
+     * Tests calling addTrip will finish a historical event missing a start date (but not other events)
+     */
+    @Test
+    fun testAddTrip_finishPast(){
+
+        val history = listOf(LocationHistory(1, DateTime(500), null, "z", "future", 1),
+                                                LocationHistory(2, DateTime(75), null, "y", "past", 2),
+                                                LocationHistory(3, DateTime(25), DateTime(75), "x", "pastComplete", 3))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        service.addTrip(DateTime(100), DateTime(200), "a", "b", 2);
+
+        verify(mockRepository, times(2)).getAllHistory()
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "a", "b", 2)
+        verify(mockRepository).updateEndTime(2, DateTime(100))
+        verifyNoMoreInteractions(mockRepository);
+    }
+    
     /**
      * Tests the updateLocation function when the chosen location doesn't exist will return false.
      */

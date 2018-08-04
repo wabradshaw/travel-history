@@ -29,13 +29,11 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'war'
 
 jar {
-    baseName = 'vcs'
-    version = project.version
+    baseName = 'travel-history'
 }
 
 war {
-    baseName = 'vcs'
-    version = project.version
+    baseName = 'travel-history'
 }
 
 repositories {

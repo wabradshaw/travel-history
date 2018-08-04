@@ -121,7 +121,22 @@ class HistoryController(val service: HistoryService) {
         } else {
             return ResponseEntity.unprocessableEntity().body("No historical location with that id exists, so nothing was updated.");
         }
+    }
 
+    @PutMapping("/history/{uuid}/blog")
+    fun addBlogPost(@PathVariable(value = "uuid") uuid: Int,
+                    @RequestParam(value = "key") key: String,
+                    @RequestParam(value = "url") url: String,
+                    @RequestParam(value = "name") name: String): ResponseEntity<String>{
+
+        if(invalidKey(key)) return ResponseEntity("Invalid authentication key for this request.", HttpStatus.FORBIDDEN)
+
+        val exists = service.addBlogPost(uuid, url, name);
+        if (exists) {
+            return ResponseEntity.noContent().build()
+        } else {
+            return ResponseEntity.unprocessableEntity().body("No historical location with that id exists, so nothing was updated.");
+        }
     }
 
     /**

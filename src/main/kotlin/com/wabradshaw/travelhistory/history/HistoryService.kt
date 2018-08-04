@@ -119,6 +119,19 @@ class HistoryService() {
     }
 
     /**
+     * Adds a new blog post to the chosen trip.
+     */
+    fun addBlogPost(uuid: Int, url: String, name: String): Boolean {
+        val current = repository.getSpecificHistory(uuid);
+        if(current == null){
+            return false
+        } else {
+            repository.addBlogPost(uuid, url, name)
+            return true;
+        }
+    }
+
+    /**
      * Finishes any trips which were unfinished that started before the given startDate.
      */
     private fun finishEarlierTrips(startDate: DateTime, existingTrips: List<LocationHistory>) {
@@ -128,4 +141,5 @@ class HistoryService() {
                         repository.updateEndTime(it.uuid, startDate)
                      }
     }
+
 }

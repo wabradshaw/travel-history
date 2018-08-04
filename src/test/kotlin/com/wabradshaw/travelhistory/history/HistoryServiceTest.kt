@@ -588,7 +588,43 @@ class HistoryServiceTest {
         verify(mockRepository).updateEndTime(2, DateTime(100))
         verifyNoMoreInteractions(mockRepository);
     }
-    
+
+    /**
+     * Tests calling addBlogPost if the location exists.
+     */
+    @Test
+    fun testAddBlogPost_exists(){
+        val history = LocationHistory(2, DateTime(75), null, "a", "b", 2)
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getSpecificHistory(2)).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        service.addBlogPost(2, "https://example.com", "example");
+
+        verify(mockRepository).addBlogPost(2, "https://example.com", "example")
+    }
+
+    /**
+     * Tests calling addBlogPost if the location doesntExist.
+     */
+    @Test
+    fun testAddBlogPost_doesntExist(){
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getSpecificHistory(2)).thenReturn(null)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        service.addBlogPost(2, "https://example.com", "example");
+
+        verify(mockRepository).getSpecificHistory(2)
+        verifyNoMoreInteractions(mockRepository)
+    }
+
     /**
      * Tests the updateLocation function when the chosen location doesn't exist will return false.
      */

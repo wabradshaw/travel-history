@@ -156,6 +156,22 @@ class HistoryRepository(val db: DatabaseConfiguration) {
     }
 
     /**
+     * Adds a blog post to a location in the database
+     * @param uuid The unique id of the location history to update
+     * @param urlVal The URL for the blog post
+     * @param nameVal The name of the blog post
+     */
+    fun addBlogPost(uuid: Int, urlVal: String, nameVal: String) {
+        connect()
+        transaction{
+            History.update({History.uuid.eq(uuid)}){
+                it[blogPostUrl] = urlVal
+                it[blogPostName] = nameVal
+            }
+        }
+    }
+
+    /**
      * A helper method that creates a BlogPost from a name and a url, provided they are both non-null. Null if either
      * was null.
      * @param url The URL pointing to the hosted blog post
@@ -169,4 +185,5 @@ class HistoryRepository(val db: DatabaseConfiguration) {
             return BlogPost(url, name)
         }
     }
+
 }

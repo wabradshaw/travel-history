@@ -139,6 +139,20 @@ class HistoryController(val service: HistoryService) {
         }
     }
 
+    @DeleteMapping("/history/{uuid}/blog")
+    fun deleteBlogPost(@PathVariable(value = "uuid") uuid: Int,
+                       @RequestParam(value = "key") key: String): ResponseEntity<String>{
+
+        if(invalidKey(key)) return ResponseEntity("Invalid authentication key for this request.", HttpStatus.FORBIDDEN)
+
+        val exists = service.deleteBlogPost(uuid);
+        if (exists) {
+            return ResponseEntity.noContent().build()
+        } else {
+            return ResponseEntity.unprocessableEntity().body("No historical location with that id exists, so nothing was updated.");
+        }
+    }
+
     @PutMapping("/history/{uuid}/map")
     fun addMap(@PathVariable(value = "uuid") uuid: Int,
                     @RequestParam(value = "key") key: String,

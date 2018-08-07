@@ -328,4 +328,55 @@ class HistoryControllerTest {
         assertEquals(422, result.statusCodeValue)
         assertEquals("No historical location with that id exists, so nothing was updated.", result.body)
     }
+
+    /**
+     * Tests the deleteBlogPost method if the user has supplied an incorrect authentication key
+     */
+    @Test
+    fun testDeleteBlogPost_invalid(){
+        val mockService = Mockito.mock(HistoryService::class.java)
+
+        val controller = HistoryController(mockService)
+        controller.targetKey = "correct"
+        val result = controller.deleteBlogPost(23, "wrong")
+
+        verifyZeroInteractions(mockService);
+
+        assertEquals(403, result.statusCodeValue);
+    }
+
+    /**
+     * Tests the deleteBlogPost method if the user has supplied a correct authentication key, and the location exists.
+     */
+    @Test
+    fun testDeleteBlogPost_valid(){
+        val mockService = Mockito.mock(HistoryService::class.java)
+        Mockito.`when`(mockService.deleteBlogPost(23)).thenReturn(true)
+
+        val controller = HistoryController(mockService)
+        controller.targetKey = "correct"
+        val result = controller.deleteBlogPost(23, "correct")
+
+        verify(mockService).deleteBlogPost(23)
+
+        assertEquals(204, result.statusCodeValue);
+    }
+
+    /**
+     * Tests the deleteBlogPost method if the user has supplied a correct authentication key, and the location exists.
+     */
+    @Test
+    fun testDeleteBlogPost_doesntExist(){
+        val mockService = Mockito.mock(HistoryService::class.java)
+        Mockito.`when`(mockService.deleteBlogPost(23)).thenReturn(false)
+
+        val controller = HistoryController(mockService)
+        controller.targetKey = "correct"
+        val result = controller.deleteBlogPost(23, "correct")
+
+        verify(mockService).deleteBlogPost(23)
+
+        assertEquals(422, result.statusCodeValue)
+        assertEquals("No historical location with that id exists, so nothing was updated.", result.body)
+    }
 }

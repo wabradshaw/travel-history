@@ -186,6 +186,20 @@ class HistoryRepository(val db: DatabaseConfiguration) {
     }
 
     /**
+     * Removes the blog post for a location in the database
+     * @param uuid The unique id of the location history to update
+     */
+    fun deleteBlogPost(uuid: Int) {
+        connect()
+        transaction{
+            History.update({History.uuid.eq(uuid)}){
+                it[blogPostUrl] = null
+                it[blogPostName] = null
+            }
+        }
+    }
+
+    /**
      * A helper method that creates a BlogPost from a name and a url, provided they are both non-null. Null if either
      * was null.
      * @param url The URL pointing to the hosted blog post

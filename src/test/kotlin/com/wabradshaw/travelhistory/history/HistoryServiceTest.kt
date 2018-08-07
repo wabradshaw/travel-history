@@ -842,4 +842,40 @@ class HistoryServiceTest {
 
         Assert.assertEquals(true, result)
     }
+
+    /**
+     * Tests calling deleteBlogPost if the location exists.
+     */
+    @Test
+    fun testDeleteBlogPost_exists(){
+        val history = LocationHistory(2, DateTime(75), null, "a", "b", 2)
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getSpecificHistory(2)).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        service.deleteBlogPost(2);
+
+        verify(mockRepository).deleteBlogPost(2)
+    }
+
+    /**
+     * Tests calling deleteBlogPost if the location doesntExist.
+     */
+    @Test
+    fun testDeleteBlogPost_doesntExist(){
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getSpecificHistory(2)).thenReturn(null)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        service.deleteBlogPost(2);
+
+        verify(mockRepository).getSpecificHistory(2)
+        verifyNoMoreInteractions(mockRepository)
+    }
 }

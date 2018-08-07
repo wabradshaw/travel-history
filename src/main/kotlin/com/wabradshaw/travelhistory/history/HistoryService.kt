@@ -145,6 +145,19 @@ class HistoryService() {
     }
 
     /**
+     * Removes the blog post from the supplied trip.
+     */
+    fun deleteBlogPost(uuid: Int): Boolean {
+        val current = repository.getSpecificHistory(uuid);
+        if(current == null){
+            return false
+        } else {
+            repository.deleteBlogPost(uuid);
+            return true
+        }
+    }
+
+    /**
      * Finishes any trips which were unfinished that started before the given startDate.
      */
     private fun finishEarlierTrips(startDate: DateTime, existingTrips: List<LocationHistory>) {

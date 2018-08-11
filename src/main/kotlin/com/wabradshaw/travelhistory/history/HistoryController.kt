@@ -21,6 +21,7 @@ class HistoryController(val service: HistoryService) {
      * Gets the list of all locations that have been visited.
      */
     @GetMapping("/history")
+    @CrossOrigin
     fun getCompleteHistory(): ResponseEntity<List<LocationHistory>> {
         return ResponseEntity.ok(service.getCompleteHistory())
     }
@@ -30,6 +31,7 @@ class HistoryController(val service: HistoryService) {
      * null.
      */
     @GetMapping("/history/current")
+    @CrossOrigin
     fun getCurrentLocation(): ResponseEntity<LocationHistory?> {
         val currentLocation = service.getCurrentLocation();
         if (currentLocation != null) {
@@ -43,6 +45,7 @@ class HistoryController(val service: HistoryService) {
      * Gets the location the person is planning to be in next. Null if the plan is not yet known.
      */
     @GetMapping("/history/next")
+    @CrossOrigin
     fun getNextLocation(): ResponseEntity<LocationHistory?> {
         val nextLocation = service.getNextLocation();
         if (nextLocation != null) {
@@ -56,6 +59,7 @@ class HistoryController(val service: HistoryService) {
      * Gets the latest blog post the person has written. Null if they have not written any blog posts.
      */
     @GetMapping("/blog/latest")
+    @CrossOrigin
     fun getLatestBlogPost(): ResponseEntity<BlogPost?> {
         val blogPost = service.getLatestBlogPost()
         if (blogPost != null) {

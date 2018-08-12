@@ -56,6 +56,24 @@ class HistoryController(val service: HistoryService) {
     }
 
     /**
+     * Gets the location the person was in on a particular date. If there isn't an entry at that time, this will return
+     * null.
+     */
+    @GetMapping("/history/at")
+    @CrossOrigin
+    fun getHistoricalLocation(@RequestParam(value="date")
+                               @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ") date: DateTime
+                              ): ResponseEntity<LocationHistory?> {
+
+        val location = service.getHistoricalLocation(date);
+        if (location != null) {
+            return ResponseEntity.ok(location);
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+    }
+
+    /**
      * Gets the latest blog post the person has written. Null if they have not written any blog posts.
      */
     @GetMapping("/blog/latest")

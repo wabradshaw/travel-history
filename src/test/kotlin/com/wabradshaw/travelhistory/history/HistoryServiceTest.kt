@@ -238,6 +238,126 @@ class HistoryServiceTest {
     }
 
     /**
+     * Tests getHistoricalLocation when the repository doesn't contain any history will return null.
+     */
+    @Test
+    fun testGetHistoricalLocation_NoHistory() {
+
+        val history = emptyList<LocationHistory>()
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(emptyList())
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getHistoricalLocation(DateTime.now())
+
+        Assert.assertEquals(null, result)
+    }
+
+    /**
+     * Tests getHistoricalLocation when the repository only contains entries in the future will return null.
+     */
+    @Test
+    fun testGetHistoricalLocation_OnlyFuture() {
+
+        val history = listOf(LocationHistory(1, DateTime(100), null, "a","a", 1),
+                LocationHistory(2, DateTime(200), null, "b","b", 1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getHistoricalLocation(DateTime(0))
+
+        Assert.assertEquals(null, result)
+    }
+
+    /**
+     * Tests getHistoricalLocation when the repository only contains entries in the past will return null.
+     */
+    @Test
+    fun testGetHistoricalLocation_OnlyPast() {
+
+        val history = listOf(LocationHistory(1, DateTime(100), DateTime(500), "a","a", 1),
+                LocationHistory(2, DateTime(500), DateTime(700), "b","b", 1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getHistoricalLocation(DateTime(1000))
+
+        Assert.assertEquals(null, result)
+    }
+
+    /**
+     * Tests getHistoricalLocation when the repository contains one location will return that.
+     */
+    @Test
+    fun testGetHistoricalLocation_OneValid() {
+
+        val history = listOf(LocationHistory(1, DateTime(0), DateTime(200), "a","a", 1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getHistoricalLocation(DateTime(100))
+
+        Assert.assertEquals("a", result?.name)
+    }
+
+    /**
+     * Tests getHistoricalLocation is able to return ongoing times.
+     */
+    @Test
+    fun testGetHistoricalLocation_Ongoing() {
+
+        val history = listOf(LocationHistory(1, DateTime(0), DateTime(200), "a","a", 1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getHistoricalLocation(DateTime(100))
+
+        Assert.assertEquals("a", result?.name)
+    }
+
+
+
+    /**
+     * Tests getHistoricalLocation when the repository contains several more locations will return the latest.
+     */
+    @Test
+    fun testGetHistoricalLocation_MultipleValid() {
+
+        val history = listOf(LocationHistory(1, DateTime(300), DateTime(800), "a","a", 1),
+                LocationHistory(2, DateTime(500), DateTime(900), "b","b", 1),
+                LocationHistory(3, DateTime(400), DateTime(1000), "c","c", 1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getHistoricalLocation(DateTime(700))
+
+        Assert.assertEquals("b", result?.name)
+    }
+    
+    /**
      * Tests getPreviousLocation when the repository doesn't contain any history will return null.
      */
     @Test

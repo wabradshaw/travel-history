@@ -45,6 +45,19 @@ class HistoryService() {
 
     }
 
+
+    /**
+     * Gets the location the person was in on a particular date, if that information is available.
+     */
+    fun getHistoricalLocation(targetDate: DateTime): LocationHistory? {
+        val allHistory = repository.getAllHistory()
+
+        return allHistory.filter { it.startTime < targetDate }
+                         .filter { val endTime = it.endTime; endTime == null || endTime >= targetDate}
+                         .sortedBy { it.startTime }
+                         .lastOrNull()
+    }
+
     /**
      * Gets the location the person was in, or is currently in, before the target date.
      */

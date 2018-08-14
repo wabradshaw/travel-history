@@ -334,8 +334,6 @@ class HistoryServiceTest {
         Assert.assertEquals("a", result?.name)
     }
 
-
-
     /**
      * Tests getHistoricalLocation when the repository contains several more locations will return the latest.
      */
@@ -356,7 +354,281 @@ class HistoryServiceTest {
 
         Assert.assertEquals("b", result?.name)
     }
-    
+
+    /**
+     * Tests getHistoricalPeriod will return the empty list if there's no history.
+     */
+    @Test
+    fun testGetHistoricalPeriod_NoHistory() {
+
+        val history = emptyList<LocationHistory>()
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
+
+        Assert.assertEquals(emptyList<LocationHistory>(), result)
+    }
+
+    /**
+     * Tests getHistoricalPeriod will exclude an event which started and finished after the time period.
+     */
+    @Test
+    fun testGetHistoricalPeriod_After() {
+
+        val history = listOf(LocationHistory(1, DateTime(30),DateTime(40), "a","b",1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
+
+        Assert.assertEquals(emptyList<LocationHistory>(), result)
+    }
+
+    /**
+     * Tests getHistoricalPeriod will exclude an event which started at the exact end of the time period.
+     */
+    @Test
+    fun testGetHistoricalPeriod_ImmediatelyAfter() {
+
+        val history = listOf(LocationHistory(1, DateTime(20),DateTime(30), "a","b",1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
+
+        Assert.assertEquals(emptyList<LocationHistory>(), result)
+    }
+
+    /**
+     * Tests getHistoricalPeriod will exclude an event which started at the exact end of the time period, but doesn't
+     * have an end time.
+     */
+    @Test
+    fun testGetHistoricalPeriod_OngoingAfter() {
+
+        val history = listOf(LocationHistory(1, DateTime(20),null, "a","b",1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
+
+        Assert.assertEquals(emptyList<LocationHistory>(), result)
+    }
+
+    /**
+     * Tests getHistoricalPeriod will include an event which started during the time period but continued after.
+     */
+    @Test
+    fun testGetHistoricalPeriod_StartsDuring() {
+
+        val history = listOf(LocationHistory(1, DateTime(10),DateTime(30), "a","b",1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
+
+        Assert.assertEquals(history, result)
+    }
+
+    /**
+     * Tests getHistoricalPeriod will include an event which is completely within the time period.
+     */
+    @Test
+    fun testGetHistoricalPeriod_Within() {
+
+        val history = listOf(LocationHistory(1, DateTime(15),DateTime(18), "a","b",1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
+
+        Assert.assertEquals(history, result)
+    }
+
+    /**
+     * Tests getHistoricalPeriod will include an event which started before the time period and finished after it.
+     */
+    @Test
+    fun testGetHistoricalPeriod_Throughout() {
+
+        val history = listOf(LocationHistory(1, DateTime(5),DateTime(28), "a","b",1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
+
+        Assert.assertEquals(history, result)
+    }
+
+    /**
+     * Tests getHistoricalPeriod will include an event which started and finished exactly when the time period did.
+     */
+    @Test
+    fun testGetHistoricalPeriod_Exact() {
+
+        val history = listOf(LocationHistory(1, DateTime(10),DateTime(20), "a","b",1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
+
+        Assert.assertEquals(history, result)
+    }
+
+    /**
+     * Tests getHistoricalPeriod will include an event which started during the time period and has no end date.
+     */
+    @Test
+    fun testGetHistoricalPeriod_OngoingDuring() {
+
+        val history = listOf(LocationHistory(1, DateTime(15), null, "a","b",1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
+
+        Assert.assertEquals(history, result)
+    }
+
+
+
+    /**
+     * Tests getHistoricalPeriod will include an event which started before the time period but ended during it.
+     */
+    @Test
+    fun testGetHistoricalPeriod_EndsDuring() {
+
+        val history = listOf(LocationHistory(1, DateTime(5),DateTime(15), "a","b",1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
+
+        Assert.assertEquals(history, result)
+    }
+
+    /**
+     * Tests getHistoricalPeriod will exclude an event which finished before the time period.
+     */
+    @Test
+    fun testGetHistoricalPeriod_EndsBefore() {
+
+        val history = listOf(LocationHistory(1, DateTime(0),DateTime(5), "a","b",1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
+
+        Assert.assertEquals(emptyList<LocationHistory>(), result)
+    }
+
+    /**
+     * Tests getHistoricalPeriod will exclude an event which finished immediately before the time period.
+     */
+    @Test
+    fun testGetHistoricalPeriod_EndsImmediatelyBefore() {
+
+        val history = listOf(LocationHistory(1, DateTime(0),DateTime(10), "a","b",1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
+
+        Assert.assertEquals(emptyList<LocationHistory>(), result)
+    }
+
+    /**
+     * Tests getHistoricalPeriod will include an event which started before the time period but is ongoing.
+     */
+    @Test
+    fun testGetHistoricalPeriod_BeforeOngoing() {
+
+        val history = listOf(LocationHistory(1, DateTime(0), null, "a","b",1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
+
+        Assert.assertEquals(history, result)
+    }
+
+    /**
+     * Tests getHistoricalPeriod can return multiple events, and will put them in order
+     */
+    @Test
+    fun testGetHistoricalPeriod_Multiple() {
+
+        val history = listOf(LocationHistory(1, DateTime(18),null, "a","A",1),
+                                                LocationHistory(1, DateTime(5),DateTime(15), "b","B",1),
+                                                LocationHistory(1, DateTime(15),DateTime(18), "c","C",1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository;
+
+        val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
+
+        Assert.assertEquals(3, result.size)
+        Assert.assertEquals("b", result[0].name)
+        Assert.assertEquals("c", result[1].name)
+        Assert.assertEquals("a", result[2].name)
+    }
+
     /**
      * Tests getPreviousLocation when the repository doesn't contain any history will return null.
      */

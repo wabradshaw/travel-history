@@ -74,6 +74,24 @@ class HistoryController(val service: HistoryService) {
     }
 
     /**
+     * Gets the list of locations the person was in between two dates. Throws a bad request if the start date is later
+     * than the end date.
+     */
+    @GetMapping("/history/between")
+    @CrossOrigin
+    fun getHistoricalPeriod(@RequestParam(value="startDate")
+                            @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ") startDate: DateTime,
+                            @RequestParam(value="endDate")
+                            @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ") endDate: DateTime
+                           ): ResponseEntity<List<LocationHistory?>> {
+        if(startDate > endDate){
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.ok(service.getHistoricalPeriod(startDate, endDate));
+        }
+    }
+
+    /**
      * Gets the latest blog post the person has written. Null if they have not written any blog posts.
      */
     @GetMapping("/blog/latest")

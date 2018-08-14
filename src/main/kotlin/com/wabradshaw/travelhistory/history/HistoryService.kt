@@ -59,6 +59,17 @@ class HistoryService() {
     }
 
     /**
+     * Gets the list of all of the locations the person was in between two dates, sorted in chronological order.
+     */
+    fun getHistoricalPeriod(startDate: DateTime, endDate: DateTime): List<LocationHistory> {
+        val allHistory = repository.getAllHistory()
+
+        return allHistory.filter{it.startTime < endDate}
+                         .filter{val endTime = it.endTime; endTime == null || startDate < endTime }
+                         .sortedBy{it.startTime}
+    }
+
+    /**
      * Gets the location the person was in, or is currently in, before the target date.
      */
     fun getPreviousLocation(targetDate: DateTime): LocationHistory? {

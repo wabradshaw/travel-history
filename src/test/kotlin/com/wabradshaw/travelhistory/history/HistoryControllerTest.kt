@@ -152,6 +152,87 @@ class HistoryControllerTest {
         assertEquals(204, result.statusCodeValue)
         assertEquals(null, result.body)
     }
+
+    /**
+     * Tests the getHistoricalPeriod method if there are locations in the period.
+     */
+    @Test
+    fun testGetHistoricalPeriod_valid_several(){
+        val firstLocation = LocationHistory(1,
+                DateTime(0),
+                DateTime(2),
+                "Sarande",
+                "Albania",
+                2)
+        val secondLocation = LocationHistory(2,
+                DateTime(2),
+                DateTime(3),
+                "Berat",
+                "Albania",
+                2)
+        val target = listOf(firstLocation, secondLocation)
+
+        val mockService = Mockito.mock(HistoryService::class.java)
+        Mockito.`when`(mockService.getHistoricalPeriod(DateTime(1), DateTime(3))).thenReturn(target)
+
+        val controller = HistoryController(mockService)
+        val result = controller.getHistoricalPeriod(DateTime(1), DateTime(3))
+
+        assertEquals(200, result.statusCodeValue)
+        assertEquals(target, result.body)
+    }
+
+    /**
+     * Tests the getHistoricalPeriod method if there are no locations in the period.
+     */
+    @Test
+    fun testGetHistoricalPeriod_valid_empty(){
+        val target = emptyList<LocationHistory>()
+
+        val mockService = Mockito.mock(HistoryService::class.java)
+        Mockito.`when`(mockService.getHistoricalPeriod(DateTime(1), DateTime(3))).thenReturn(target)
+
+        val controller = HistoryController(mockService)
+        val result = controller.getHistoricalPeriod(DateTime(1), DateTime(3))
+
+        assertEquals(200, result.statusCodeValue)
+        assertEquals(target, result.body)
+    }
+
+    /**
+     * Tests the getHistoricalPeriod method if there are locations in the period.
+     */
+    @Test
+    fun testGetHistoricalPeriod_sameTime(){
+        val target = listOf(LocationHistory(1,
+                DateTime(0),
+                DateTime(2),
+                "Sarande",
+                "Albania",
+                2))
+
+        val mockService = Mockito.mock(HistoryService::class.java)
+        Mockito.`when`(mockService.getHistoricalPeriod(DateTime(1), DateTime(1))).thenReturn(target)
+
+        val controller = HistoryController(mockService)
+        val result = controller.getHistoricalPeriod(DateTime(1), DateTime(1))
+
+        assertEquals(200, result.statusCodeValue)
+        assertEquals(target, result.body)
+    }
+
+    /**
+     * Tests the getHistoricalPeriod method if the end date happens before the start date.
+     */
+    @Test
+    fun testGetHistoricalPeriod_invalid(){
+        val mockService = Mockito.mock(HistoryService::class.java)
+
+        val controller = HistoryController(mockService)
+        val result = controller.getHistoricalPeriod(DateTime(3), DateTime(1))
+
+        assertEquals(400, result.statusCodeValue)
+    }
     
     /**
      * Tests the getNextLocation method if that information is known.

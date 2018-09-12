@@ -1,6 +1,5 @@
 package com.wabradshaw.travelhistory.history
 
-import com.wabradshaw.travelhistory.database.History.uuid
 import org.joda.time.DateTime
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.format.annotation.DateTimeFormat

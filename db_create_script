@@ -1,4 +1,4 @@
-CREATE TABLE `history` (
+CREATE TABLE `History` (
 	`uuid` INT(11) NOT NULL AUTO_INCREMENT,
 	`start_time` DATETIME(6) NOT NULL,
 	`end_time` DATETIME(6) NULL DEFAULT NULL,

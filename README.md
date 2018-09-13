@@ -72,6 +72,57 @@ Gets the list of all locations the Traveller has visited, intends to visit, or w
 
 **Response:** A json list of [LocationHistory](#locationhistory) objects. 
 
+### Get Current Location
+
+Gets the location the Traveller is currently. No content if the Traveller hasn't supplied that information. 
+
+If the Traveller has claimed to be in multiple locations at the current time, the most recent one will be returned. 
+
+**Example:** http://54.191.146.40:8080/travel-history/history/current
+
+**Type:** GET
+
+**URL :** http://54.191.146.40:8080/travel-history/history/current
+
+**Data:** None
+
+**Response:** A json [LocationHistory](#locationhistory) object, or empty if no location has been supplied.
+
+### Get Next Location
+
+Gets the location the Traveller is planning to be in next. No content if the Traveller hasn't supplied that information.  
+
+**Example:** http://54.191.146.40:8080/travel-history/history/next
+
+**Type:** GET
+
+**URL :** http://54.191.146.40:8080/travel-history/history/next
+
+**Data:** None
+
+**Response:** A json [LocationHistory](#locationhistory) object, or empty if no location has been supplied.
+ 
+### Get Location at a Specific Time
+
+Gets the location the Traveller is/was/will be in at a particular time. Null if the Traveller hasn't supplied that 
+information. 
+
+If the Traveller has claimed to be in multiple locations at the specified time, the oldest one will be returned. 
+
+**Example:** http://54.191.146.40:8080/travel-history/history/at?date=2018-09-13T11:20:00.000%2b01:00
+
+**Type:** GET
+
+**URL :** http://54.191.146.40:8080/travel-history/history/at
+
+**Data:** 
+
+| Argument | Optional | Description | 
+| ---------| -------- | ----------- |
+| date | false | The timestamp for the request. In encoded IS08601 format (yyyy-MM-dd'T'HH:mm:ss.SSSZ). |
+
+**Response:** A json [LocationHistory](#locationhistory) object, or empty if no location has been supplied at that time.
+
 ## Write Access
 The Traveller is able to change their travel history using an access key. All write functions require this
 authentication key before anything can happen.

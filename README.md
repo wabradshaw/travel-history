@@ -292,3 +292,31 @@ Returns forbidden unless a valid key is used.
 1. An empty success object if the delete went ahead.
 2. A forbidden response if an invalid key was supplied.
 3. An unprocessable entity if the uuid doesn't match a location.
+
+### Add a Map
+
+Adds a map to a particular travel location. If a map already exists for the location, its information will be overwritten.
+
+Returns forbidden unless a valid key is used.
+
+**Example:** curl -X PUT -d "key=YourKey&url=http://myExample.com/map.png" http://54.191.146.40:8080/travel-history/history/33/map
+
+**Type:** PUT
+
+**URL :** http://54.191.146.40:8080/travel-history/history/{uuid}/map
+
+| Argument | Description | 
+| ---------| ----------- |
+| uuid | The unique id of the location the blog post is about. |
+
+**Data:** 
+
+| Argument | Optional | Description | 
+| ---------| -------- | ----------- |
+| key | No | The deployment specific key enabling write access. |
+| url | No | The URL containing the map image. |
+
+**Response:** One of:
+1. An empty success object if the update went ahead.
+2. A forbidden response if an invalid key was supplied.
+3. An unprocessable entity if the uuid doesn't match a location.      

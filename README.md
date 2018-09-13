@@ -3,6 +3,26 @@ Travel History is a simple RESTful service that manages a history of where someo
 server stores the data for a single Traveller, which can be accessed by multiple Readers. The history includes when and
 where the Traveller was/is/will be, as well as optionally linking each location with a map and/or a blog post.
 
+- [Installation](#installation)
+- [API](#api)
+  * [Response Objects](#response-objects)
+    + [LocationHistory](#locationhistory)
+    + [BlogPost](#blogpost)
+  * [Read Access](#read-access)
+    + [Get Server Version](#get-server-version)
+    + [Get Complete Travel History](#get-complete-travel-history)
+    + [Get Current Location](#get-current-location)
+    + [Get Next Location](#get-next-location)
+    + [Get Location at a Specific Time](#get-location-at-a-specific-time)
+    + [Get All Locations between Two Dates](#get-all-locations-between-two-dates)
+    + [Get Latest Blog Post](#get-latest-blog-post)
+  * [Write Access](#write-access)
+    + [Add a New Location](#add-a-new-location)
+    + [Update a Location](#update-a-location)
+    + [Add a BlogPost](#add-a-blogpost)
+    + [Delete a BlogPost](#delete-a-blogpost)
+    + [Add a Map](#add-a-map)
+    
 # Installation
 1. Create a database (the project is bundled with drivers for [MariaDB](https://mariadb.org/))
 2. Run the command stored in the [db_create_script](../blob/master/db_create_script) using your database
@@ -319,4 +339,7 @@ Returns forbidden unless a valid key is used.
 **Response:** One of:
 1. An empty success object if the update went ahead.
 2. A forbidden response if an invalid key was supplied.
-3. An unprocessable entity if the uuid doesn't match a location.      
+3. An unprocessable entity if the uuid doesn't match a location.
+
+---------------------------------------
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>

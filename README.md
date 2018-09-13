@@ -119,9 +119,32 @@ If the Traveller has claimed to be in multiple locations at the specified time, 
 
 | Argument | Optional | Description | 
 | ---------| -------- | ----------- |
-| date | false | The timestamp for the request. In encoded IS08601 format (yyyy-MM-dd'T'HH:mm:ss.SSSZ). |
+| date | No | The timestamp for the request. In encoded IS08601 format (yyyy-MM-dd'T'HH:mm:ss.SSSZ). |
 
 **Response:** A json [LocationHistory](#locationhistory) object, or empty if no location has been supplied at that time.
+
+### Get All Locations between Two Dates
+
+Gets all of the locations the Traveller is/was/will be in between two particular times, in chronological order.
+
+Does not return locations where the Traveller left at exactly the startDate, or arrived at exactly the endDate.
+
+Returns a bad response code if the end date is before the start date.  
+
+**Example:** http://54.191.146.40:8080/travel-history/history/between?startDate=2018-08-20T12:00:00.000%2b01:00&endDate=2018-09-20T12:00:00.000%2b01:00
+
+**Type:** GET
+
+**URL :** http://54.191.146.40:8080/travel-history/history/between
+
+**Data:** 
+
+| Argument | Optional | Description | 
+| ---------| -------- | ----------- |
+| startDate | No | The timestamp for the start of the period. In encoded IS08601 format (yyyy-MM-dd'T'HH:mm:ss.SSSZ). |
+| endDate | No | The timestamp for the end of the period. In encoded IS08601 format (yyyy-MM-dd'T'HH:mm:ss.SSSZ). |
+
+**Response:** A list of json [LocationHistory](#locationhistory) objects.
 
 ## Write Access
 The Traveller is able to change their travel history using an access key. All write functions require this

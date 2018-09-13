@@ -234,3 +234,61 @@ Returns forbidden unless a valid key is used.
 1. An empty success object if the update went ahead.
 2. A forbidden response if an invalid key was supplied.
 3. An unprocessable entity if the uuid doesn't match a location.      
+
+### Add a BlogPost
+
+Adds information about a blog post to a particular travel location. If a blog post already exists for the location, its
+information will be overwritten.
+
+Returns forbidden unless a valid key is used.
+
+**Example:** curl -X PUT -d "key=YourKey&url=http://myExample.com&name=An example blog post" http://54.191.146.40:8080/travel-history/history/33/blog
+
+**Type:** PUT
+
+**URL :** http://54.191.146.40:8080/travel-history/history/{uuid}/blog
+
+| Argument | Description | 
+| ---------| ----------- |
+| uuid | The unique id of the location the blog post is about. |
+
+**Data:** 
+
+| Argument | Optional | Description | 
+| ---------| -------- | ----------- |
+| key | No | The deployment specific key enabling write access. |
+| url | No | The URL containing the blog post. |
+| name | No | The human readable name for the blog post. |
+
+**Response:** One of:
+1. An empty success object if the update went ahead.
+2. A forbidden response if an invalid key was supplied.
+3. An unprocessable entity if the uuid doesn't match a location.      
+
+### Delete a BlogPost
+
+Removes information about a blog post to a particular travel location. Does nothing unless a blog post exists for the 
+location.
+
+Returns forbidden unless a valid key is used.
+
+**Example:** curl -X DELETE -d "key=YourKey" http://54.191.146.40:8080/travel-history/history/33/blog
+
+**Type:** DELETE
+
+**URL :** http://54.191.146.40:8080/travel-history/history/{uuid}/blog
+
+| Argument | Description | 
+| ---------| ----------- |
+| uuid | The unique id of the location that has an unnecessary blog post. |
+
+**Data:** 
+
+| Argument | Optional | Description | 
+| ---------| -------- | ----------- |
+| key | No | The deployment specific key enabling write access. |
+
+**Response:** One of:
+1. An empty success object if the delete went ahead.
+2. A forbidden response if an invalid key was supplied.
+3. An unprocessable entity if the uuid doesn't match a location.

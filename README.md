@@ -104,7 +104,7 @@ Gets the location the Traveller is planning to be in next. No content if the Tra
  
 ### Get Location at a Specific Time
 
-Gets the location the Traveller is/was/will be in at a particular time. Null if the Traveller hasn't supplied that 
+Gets the location the Traveller is/was/will be in at a particular time. No content if the Traveller hasn't supplied that 
 information. 
 
 If the Traveller has claimed to be in multiple locations at the specified time, the oldest one will be returned. 
@@ -145,6 +145,21 @@ Returns a bad response code if the end date is before the start date.
 | endDate | No | The timestamp for the end of the period. In encoded IS08601 format (yyyy-MM-dd'T'HH:mm:ss.SSSZ). |
 
 **Response:** A list of json [LocationHistory](#locationhistory) objects.
+
+### Get Latest Blog Post
+
+Gets the blog post for the most recently visited location. No content if the Traveller hasn't written a blog post about
+any of the locations in the travel history. 
+
+**Example:** http://54.191.146.40:8080/travel-history/blog/latest
+
+**Type:** GET
+
+**URL :** http://54.191.146.40:8080/travel-history/blog/latest
+
+**Data:** None
+
+**Response:** A [BlogPost](#blogpost) object, or empty if no blog posts have been written.
 
 ## Write Access
 The Traveller is able to change their travel history using an access key. All write functions require this

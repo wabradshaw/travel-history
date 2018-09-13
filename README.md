@@ -165,4 +165,33 @@ any of the locations in the travel history.
 The Traveller is able to change their travel history using an access key. All write functions require this
 authentication key before anything can happen.
 
+### Add a New Location
 
+Adds a new location to the Traveller's travel history.
+
+Missing information such as country or timezone will be inferred from the location the Traveller was in immediately 
+before the start date.
+
+If there is an ongoing locations in the travel history before the start date, it will be stopped when this location
+starts. This means you can omit endDates if you insert locations into a TravelHistory sequentially. 
+
+Returns forbidden unless a valid key is used.
+
+**Example:** curl -X POST -d "key=YourKey&startDate=2018-08-20T12:00:00.000%2b01:00&name=Doncaster" http://54.191.146.40:8080/travel-history/history
+
+**Type:** POST
+
+**URL :** http://54.191.146.40:8080/travel-history/history
+
+**Data:** 
+
+| Argument | Optional | Description | 
+| ---------| -------- | ----------- |
+| key | No | The deployment specific key enabling write access. |
+| startDate | No | The date when the Traveller arrives/arrived at the location. In encoded IS08601 format (yyyy-MM-dd'T'HH:mm:ss.SSSZ).|
+| endDate | Yes | The date when the Traveller leaves/left the location. Null if the Traveller hasn't planned to leave yet. |
+| name | No | The name of the location being visited. |
+| country | Yes | The name of the country the location is part of. If no country is supplied, the country immediately before this location will be used. |
+| timezone | Yes | The timezone offset from UTC at the location. If no timezone is supplied, the timezone immediately before this location will be used. |
+
+**Response:** An empty success object, or a forbidden response if an invalid key was supplied.

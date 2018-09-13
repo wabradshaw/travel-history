@@ -189,9 +189,48 @@ Returns forbidden unless a valid key is used.
 | ---------| -------- | ----------- |
 | key | No | The deployment specific key enabling write access. |
 | startDate | No | The date when the Traveller arrives/arrived at the location. In encoded IS08601 format (yyyy-MM-dd'T'HH:mm:ss.SSSZ).|
-| endDate | Yes | The date when the Traveller leaves/left the location. Null if the Traveller hasn't planned to leave yet. |
+| endDate | Yes | The date when the Traveller leaves/left the location. In encoded IS08601 format (yyyy-MM-dd'T'HH:mm:ss.SSSZ). Null if the Traveller hasn't planned to leave yet. |
 | name | No | The name of the location being visited. |
 | country | Yes | The name of the country the location is part of. If no country is supplied, the country immediately before this location will be used. |
 | timezone | Yes | The timezone offset from UTC at the location. If no timezone is supplied, the timezone immediately before this location will be used. |
 
 **Response:** An empty success object, or a forbidden response if an invalid key was supplied.
+
+### Update a Location
+
+Updates a location in the Traveller's travel history with new information. This can update any or all of:
+* startDate
+* endDate
+* name
+* country
+* timezone
+
+Only supplied fields will be updated. 
+
+Returns forbidden unless a valid key is used.
+
+**Example:** curl -X PATCH -d "key=YourKey&country=narnia&timezone=-12" http://54.191.146.40:8080/travel-history/history/33
+
+**Type:** PATCH
+
+**URL :** http://54.191.146.40:8080/travel-history/history/{uuid}
+
+| Argument | Description | 
+| ---------| ----------- |
+| uuid | The unique id of the location which should be updated. |
+
+**Data:** 
+
+| Argument | Optional | Description | 
+| ---------| -------- | ----------- |
+| key | No | The deployment specific key enabling write access. |
+| startDate | Yes | The updated date when the Traveller arrives/arrived at the location. In encoded IS08601 format (yyyy-MM-dd'T'HH:mm:ss.SSSZ).|
+| endDate | Yes | The updated date when the Traveller leaves/left the location. In encoded IS08601 format (yyyy-MM-dd'T'HH:mm:ss.SSSZ).|
+| name | Yes | The updated name of the location being visited. |
+| country | Yes | The updated name of the country the location is part of. |
+| timezone | Yes | The updated timezone offset from UTC at the location. |
+
+**Response:** One of:
+1. An empty success object if the update went ahead.
+2. A forbidden response if an invalid key was supplied.
+3. An unprocessable entity if the uuid doesn't match a location.      

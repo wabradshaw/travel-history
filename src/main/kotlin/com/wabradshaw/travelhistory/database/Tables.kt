@@ -11,6 +11,7 @@ object History : Table() {
     val uuid: Column<Int> = integer("uuid").primaryKey().autoIncrement()
     val startTime: Column<DateTime> = datetime("start_time")
     val endTime: Column<DateTime?> = datetime("end_time").nullable()
+    val group: Column<String> = varchar("group", length=600)
     val name: Column<String> = varchar("name", length=600)
     val country: Column<String> = varchar("country", length=600)
     val timezone: Column<Int> = integer("timezone_offset")

@@ -124,13 +124,14 @@ class HistoryController(val service: HistoryService) {
                     @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ") startDate: DateTime,
                 @RequestParam(value="endDate", required = false)
                     @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ") endDate: DateTime?,
+                @RequestParam(value="group", required = false) group: String?,
                 @RequestParam(value="name") name: String,
                 @RequestParam(value="country", required = false) country: String?,
                 @RequestParam(value="timezone", required = false) timezone: Int?): ResponseEntity<String>{
 
         if(invalidKey(key)) return ResponseEntity("Invalid authentication key for this request.", HttpStatus.FORBIDDEN)
 
-        service.addTrip(startDate, endDate, name, country, timezone);
+        service.addTrip(startDate, endDate, group, name, country, timezone);
 
         return ResponseEntity.noContent().build();
     }
@@ -148,13 +149,14 @@ class HistoryController(val service: HistoryService) {
                         @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ") startDate: DateTime?  = null,
                        @RequestParam(value = "endDate", required = false)
                         @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ") endDate: DateTime? = null,
+                       @RequestParam(value = "group", required = false) group: String? = null,
                        @RequestParam(value = "name", required = false) name: String? = null,
                        @RequestParam(value = "country", required = false) country: String? = null,
                        @RequestParam(value = "timezone", required = false) timezone: Int? = null): ResponseEntity<String> {
 
         if(invalidKey(key)) return ResponseEntity("Invalid authentication key for this request.", HttpStatus.FORBIDDEN)
 
-        val exists = service.updateLocation(uuid, startDate, endDate, name, country, timezone)
+        val exists = service.updateLocation(uuid, startDate, endDate, group, name, country, timezone)
         if (exists) {
             return ResponseEntity.noContent().build()
         } else {

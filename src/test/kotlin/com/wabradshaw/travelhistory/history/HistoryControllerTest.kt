@@ -21,6 +21,7 @@ class HistoryControllerTest {
         val target = listOf(LocationHistory(1,
                                                DateTime(0),
                                                DateTime(1),
+                                               "holiday",
                                                "Tirana",
                                                "Albania",
                                                2,
@@ -45,6 +46,7 @@ class HistoryControllerTest {
         val target = LocationHistory(1,
                                      DateTime(0),
                                      DateTime(1),
+                                    "holiday",
                                      "Tirana",
                                      "Albania",
                                      2,
@@ -85,6 +87,7 @@ class HistoryControllerTest {
         val target = LocationHistory(1,
                                      DateTime(0),
                                      DateTime(1),
+                                     "holiday",
                                      "Sarande",
                                      "Albania",
                                      2)
@@ -123,6 +126,7 @@ class HistoryControllerTest {
         val target = LocationHistory(1,
                 DateTime(0),
                 DateTime(2),
+                "holiday",
                 "Sarande",
                 "Albania",
                 2)
@@ -161,12 +165,14 @@ class HistoryControllerTest {
         val firstLocation = LocationHistory(1,
                 DateTime(0),
                 DateTime(2),
+                "holiday",
                 "Sarande",
                 "Albania",
                 2)
         val secondLocation = LocationHistory(2,
                 DateTime(2),
                 DateTime(3),
+                "holiday",
                 "Berat",
                 "Albania",
                 2)
@@ -207,6 +213,7 @@ class HistoryControllerTest {
         val target = listOf(LocationHistory(1,
                 DateTime(0),
                 DateTime(2),
+                "holiday",
                 "Sarande",
                 "Albania",
                 2))
@@ -276,11 +283,11 @@ class HistoryControllerTest {
 
         val controller = HistoryController(mockService)
         controller.targetKey = "correct"
-        val result = controller.addTrip("wrong", DateTime(0), DateTime(1), "a", "b", 5)
+        val result = controller.addTrip("wrong", DateTime(0), DateTime(1), "z","a", "b", 5)
 
-        verifyZeroInteractions(mockService);
+        verifyZeroInteractions(mockService)
 
-        assertEquals(403, result.statusCodeValue);
+        assertEquals(403, result.statusCodeValue)
     }
 
     /**
@@ -292,11 +299,11 @@ class HistoryControllerTest {
 
         val controller = HistoryController(mockService)
         controller.targetKey = "correct"
-        val result = controller.addTrip("correct", DateTime(0), DateTime(1), "a", "b", 5)
+        val result = controller.addTrip("correct", DateTime(0), DateTime(1), "z","a", "b", 5)
 
-        verify(mockService).addTrip(DateTime(0), DateTime(1), "a", "b", 5)
+        verify(mockService).addTrip(DateTime(0), DateTime(1), "z","a", "b", 5)
 
-        assertEquals(204, result.statusCodeValue);
+        assertEquals(204, result.statusCodeValue)
     }
 
     /**
@@ -310,9 +317,9 @@ class HistoryControllerTest {
         controller.targetKey = "correct"
         val result = controller.addBlogPost(23, "wrong", "https://example.com", "bob")
 
-        verifyZeroInteractions(mockService);
+        verifyZeroInteractions(mockService)
 
-        assertEquals(403, result.statusCodeValue);
+        assertEquals(403, result.statusCodeValue)
     }
 
     /**
@@ -329,7 +336,7 @@ class HistoryControllerTest {
 
         verify(mockService).addBlogPost(23, "https://example.com", "bob")
 
-        assertEquals(204, result.statusCodeValue);
+        assertEquals(204, result.statusCodeValue)
     }
 
     /**
@@ -362,9 +369,9 @@ class HistoryControllerTest {
         controller.targetKey = "correct"
         val result = controller.addMap(23, "wrong", "https://example.com")
 
-        verifyZeroInteractions(mockService);
+        verifyZeroInteractions(mockService)
 
-        assertEquals(403, result.statusCodeValue);
+        assertEquals(403, result.statusCodeValue)
     }
 
     /**
@@ -381,7 +388,7 @@ class HistoryControllerTest {
 
         verify(mockService).addMap(23, "https://example.com")
 
-        assertEquals(204, result.statusCodeValue);
+        assertEquals(204, result.statusCodeValue)
     }
 
     /**
@@ -414,7 +421,7 @@ class HistoryControllerTest {
         controller.targetKey = "correct"
         val result = controller.updateLocation(23, "wrong")
 
-        assertEquals(403, result.statusCodeValue);
+        assertEquals(403, result.statusCodeValue)
     }
 
     /**
@@ -429,7 +436,7 @@ class HistoryControllerTest {
         controller.targetKey = "correct"
         val result = controller.updateLocation(23, "correct")
 
-        assertEquals(204, result.statusCodeValue);
+        assertEquals(204, result.statusCodeValue)
     }
 
     /**
@@ -459,9 +466,9 @@ class HistoryControllerTest {
         controller.targetKey = "correct"
         val result = controller.deleteBlogPost(23, "wrong")
 
-        verifyZeroInteractions(mockService);
+        verifyZeroInteractions(mockService)
 
-        assertEquals(403, result.statusCodeValue);
+        assertEquals(403, result.statusCodeValue)
     }
 
     /**
@@ -478,7 +485,7 @@ class HistoryControllerTest {
 
         verify(mockService).deleteBlogPost(23)
 
-        assertEquals(204, result.statusCodeValue);
+        assertEquals(204, result.statusCodeValue)
     }
 
     /**

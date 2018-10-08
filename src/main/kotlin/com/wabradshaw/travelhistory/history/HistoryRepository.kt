@@ -30,6 +30,7 @@ class HistoryRepository(val db: DatabaseConfiguration) {
                                       .map{row -> LocationHistory(row[History.uuid],
                                                                   row[History.startTime],
                                                                   row[History.endTime],
+                                                                  row[History.group],
                                                                   row[History.name],
                                                                   row[History.country],
                                                                   row[History.timezone],
@@ -52,6 +53,7 @@ class HistoryRepository(val db: DatabaseConfiguration) {
                     .map{row -> LocationHistory(row[History.uuid],
                             row[History.startTime],
                             row[History.endTime],
+                            row[History.group],
                             row[History.name],
                             row[History.country],
                             row[History.timezone],
@@ -65,19 +67,26 @@ class HistoryRepository(val db: DatabaseConfiguration) {
 
     /**
      * Inserts the specified trip into the database.
-     * @param startDate The dateTime when the trip started.
-     * @param endDate The dateTime when the user will move on from the trip. Null if that isn't known yet.
-     * @param name The name of the location for the trip.
-     * @param country The name of the country the trip is in.
-     * @param timezone The timezone offset for the location.
+     * @param startTimeVal The dateTime when the trip started.
+     * @param endTimeVal The dateTime when the user will move on from the trip. Null if that isn't known yet.
+     * @param groupVal The name of the overall group of trips this trip is part of.
+     * @param nameVal The name of the location for the trip.
+     * @param countryVal The name of the country the trip is in.
+     * @param timezoneVal The timezone offset for the location.
      */
-    fun addTrip(startTimeVal: DateTime, endTimeVal: DateTime?, nameVal: String, countryVal: String, timezoneVal: Int){
+    fun addTrip(startTimeVal: DateTime,
+                endTimeVal: DateTime?,
+                groupVal: String,
+                nameVal: String,
+                countryVal: String,
+                timezoneVal: Int){
         connect();
 
         transaction{
             History.insert{
                 it[startTime] = startTimeVal
                 it[endTime] = endTimeVal
+                it[group] = groupVal
                 it[name] = nameVal
                 it[country] = countryVal
                 it[timezone] = timezoneVal
@@ -109,6 +118,20 @@ class HistoryRepository(val db: DatabaseConfiguration) {
         transaction{
             History.update({History.uuid.eq(uuid)}){
                 it[endTime] = endTimeVal
+            }
+        }
+    }
+
+    /**
+     * Updates the place name of a location in the database
+     * @param uuid The unique id of the location history to update
+     * @param groupVal The new name of the overall group of trips this trip is part of.
+     */
+    fun updateGroup(uuid: Int, groupVal: String){
+        connect();
+        transaction{
+            History.update({History.uuid.eq(uuid)}){
+                it[name] = groupVal
             }
         }
     }

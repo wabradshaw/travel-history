@@ -17,6 +17,7 @@ import org.joda.time.DateTime
 data class LocationHistory(val uuid: Int,
                            val startTime: DateTime,
                            var endTime: DateTime?,
+                           val group: String,
                            val name: String,
                            val country: String,
                            val timezone: Int,

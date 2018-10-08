@@ -20,6 +20,7 @@ class HistoryServiceTest {
         val target = listOf(LocationHistory(1,
                 DateTime(0),
                 DateTime(1),
+                "Balkans",
                 "Tirana",
                 "Albania",
                 2,
@@ -30,7 +31,7 @@ class HistoryServiceTest {
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(target)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getCompleteHistory()
 
@@ -49,7 +50,7 @@ class HistoryServiceTest {
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getCurrentLocation()
 
@@ -62,14 +63,14 @@ class HistoryServiceTest {
     @Test
     fun testGetCurrentLocation_TooEarly() {
 
-        val history = listOf(LocationHistory(1, DateTime.now().plusDays(1), null, "a","a", 1),
-                                                LocationHistory(2, DateTime.now().plusDays(5), null, "b","b", 1))
+        val history = listOf(LocationHistory(1, DateTime.now().plusDays(1), null, "z", "a","a", 1),
+                                                LocationHistory(2, DateTime.now().plusDays(5), null, "z", "b","b", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getCurrentLocation()
 
@@ -82,14 +83,14 @@ class HistoryServiceTest {
     @Test
     fun testGetCurrentLocation_AllComplete() {
 
-        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-10), DateTime.now().plusDays(-5), "a","a", 1),
-                                                LocationHistory(2, DateTime.now().plusDays(-5), DateTime.now().plusDays(-1), "b","b", 1))
+        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-10), DateTime.now().plusDays(-5), "z", "a","a", 1),
+                                                LocationHistory(2, DateTime.now().plusDays(-5), DateTime.now().plusDays(-1), "z", "b","b", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getCurrentLocation()
 
@@ -102,13 +103,13 @@ class HistoryServiceTest {
     @Test
     fun testGetCurrentLocation_OneOngoing_UnknownEnd() {
 
-        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-10), null, "a","a", 1))
+        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-10), null, "z", "a","a", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getCurrentLocation()
 
@@ -122,13 +123,13 @@ class HistoryServiceTest {
     @Test
     fun testGetCurrentLocation_OneOngoing_KnownEnd() {
 
-        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-10), DateTime.now().plusDays(10), "a","a", 1))
+        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-10), DateTime.now().plusDays(10), "z", "a","a", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getCurrentLocation()
 
@@ -142,15 +143,15 @@ class HistoryServiceTest {
     @Test
     fun testGetCurrentLocation_MultipleOngoing() {
 
-        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-10), DateTime.now().plusDays(10), "a","a", 1),
-                LocationHistory(2, DateTime.now().plusDays(-4), null, "b","b", 1),
-                LocationHistory(3, DateTime.now().plusDays(-7), null, "c","c", 1))
+        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-10), DateTime.now().plusDays(10), "z", "a","a", 1),
+                LocationHistory(2, DateTime.now().plusDays(-4), null, "z", "b","b", 1),
+                LocationHistory(3, DateTime.now().plusDays(-7), null, "z", "c","c", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getCurrentLocation()
 
@@ -169,7 +170,7 @@ class HistoryServiceTest {
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getNextLocation()
 
@@ -182,14 +183,14 @@ class HistoryServiceTest {
     @Test
     fun testGetNextLocation_TooLate() {
 
-        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-1), null, "a","a", 1),
-                                                LocationHistory(2, DateTime.now().plusDays(-5), null, "b","b", 1))
+        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-1), null, "z", "a","a", 1),
+                                                LocationHistory(2, DateTime.now().plusDays(-5), null, "z", "b","b", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getNextLocation()
 
@@ -202,13 +203,13 @@ class HistoryServiceTest {
     @Test
     fun testGetNextLocation_OneNext() {
 
-        val history = listOf(LocationHistory(1, DateTime.now().plusDays(1), null, "a","a", 1))
+        val history = listOf(LocationHistory(1, DateTime.now().plusDays(1), null, "z", "a","a", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getNextLocation()
 
@@ -222,15 +223,15 @@ class HistoryServiceTest {
     @Test
     fun testGetNextLocation_MultipleNext() {
 
-        val history = listOf(LocationHistory(1, DateTime.now().plusDays(3), null, "a","a", 1),
-                                                LocationHistory(2, DateTime.now().plusDays(1), null, "b","b", 1),
-                                                LocationHistory(3, DateTime.now().plusDays(5), null, "c","c", 1))
+        val history = listOf(LocationHistory(1, DateTime.now().plusDays(3), null, "z", "a","a", 1),
+                                                LocationHistory(2, DateTime.now().plusDays(1), null, "z", "b","b", 1),
+                                                LocationHistory(3, DateTime.now().plusDays(5), null, "z", "c","c", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getNextLocation()
 
@@ -243,13 +244,11 @@ class HistoryServiceTest {
     @Test
     fun testGetHistoricalLocation_NoHistory() {
 
-        val history = emptyList<LocationHistory>()
-
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(emptyList())
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getHistoricalLocation(DateTime.now())
 
@@ -262,14 +261,14 @@ class HistoryServiceTest {
     @Test
     fun testGetHistoricalLocation_OnlyFuture() {
 
-        val history = listOf(LocationHistory(1, DateTime(100), null, "a","a", 1),
-                LocationHistory(2, DateTime(200), null, "b","b", 1))
+        val history = listOf(LocationHistory(1, DateTime(100), null, "z", "a","a", 1),
+                LocationHistory(2, DateTime(200), null, "z", "b","b", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getHistoricalLocation(DateTime(0))
 
@@ -282,14 +281,14 @@ class HistoryServiceTest {
     @Test
     fun testGetHistoricalLocation_OnlyPast() {
 
-        val history = listOf(LocationHistory(1, DateTime(100), DateTime(500), "a","a", 1),
-                LocationHistory(2, DateTime(500), DateTime(700), "b","b", 1))
+        val history = listOf(LocationHistory(1, DateTime(100), DateTime(500), "z", "a","a", 1),
+                LocationHistory(2, DateTime(500), DateTime(700), "z", "b","b", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getHistoricalLocation(DateTime(1000))
 
@@ -302,13 +301,13 @@ class HistoryServiceTest {
     @Test
     fun testGetHistoricalLocation_OneValid() {
 
-        val history = listOf(LocationHistory(1, DateTime(0), DateTime(200), "a","a", 1))
+        val history = listOf(LocationHistory(1, DateTime(0), DateTime(200), "z", "a","a", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getHistoricalLocation(DateTime(100))
 
@@ -321,13 +320,13 @@ class HistoryServiceTest {
     @Test
     fun testGetHistoricalLocation_Ongoing() {
 
-        val history = listOf(LocationHistory(1, DateTime(0), DateTime(200), "a","a", 1))
+        val history = listOf(LocationHistory(1, DateTime(0), DateTime(200), "z", "a","a", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getHistoricalLocation(DateTime(100))
 
@@ -340,15 +339,15 @@ class HistoryServiceTest {
     @Test
     fun testGetHistoricalLocation_MultipleValid() {
 
-        val history = listOf(LocationHistory(1, DateTime(300), DateTime(800), "a","a", 1),
-                LocationHistory(2, DateTime(500), DateTime(900), "b","b", 1),
-                LocationHistory(3, DateTime(400), DateTime(1000), "c","c", 1))
+        val history = listOf(LocationHistory(1, DateTime(300), DateTime(800), "z", "a","a", 1),
+                LocationHistory(2, DateTime(500), DateTime(900), "z", "b","b", 1),
+                LocationHistory(3, DateTime(400), DateTime(1000), "z", "c","c", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getHistoricalLocation(DateTime(700))
 
@@ -367,7 +366,7 @@ class HistoryServiceTest {
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
 
@@ -380,13 +379,13 @@ class HistoryServiceTest {
     @Test
     fun testGetHistoricalPeriod_After() {
 
-        val history = listOf(LocationHistory(1, DateTime(30),DateTime(40), "a","b",1))
+        val history = listOf(LocationHistory(1, DateTime(30),DateTime(40), "z", "a","b",1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
 
@@ -399,13 +398,13 @@ class HistoryServiceTest {
     @Test
     fun testGetHistoricalPeriod_ImmediatelyAfter() {
 
-        val history = listOf(LocationHistory(1, DateTime(20),DateTime(30), "a","b",1))
+        val history = listOf(LocationHistory(1, DateTime(20),DateTime(30), "z", "a","b",1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
 
@@ -419,13 +418,13 @@ class HistoryServiceTest {
     @Test
     fun testGetHistoricalPeriod_OngoingAfter() {
 
-        val history = listOf(LocationHistory(1, DateTime(20),null, "a","b",1))
+        val history = listOf(LocationHistory(1, DateTime(20),null, "z", "a","b",1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
 
@@ -438,13 +437,13 @@ class HistoryServiceTest {
     @Test
     fun testGetHistoricalPeriod_StartsDuring() {
 
-        val history = listOf(LocationHistory(1, DateTime(10),DateTime(30), "a","b",1))
+        val history = listOf(LocationHistory(1, DateTime(10),DateTime(30), "z", "a","b",1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
 
@@ -457,13 +456,13 @@ class HistoryServiceTest {
     @Test
     fun testGetHistoricalPeriod_Within() {
 
-        val history = listOf(LocationHistory(1, DateTime(15),DateTime(18), "a","b",1))
+        val history = listOf(LocationHistory(1, DateTime(15),DateTime(18), "z", "a","b",1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
 
@@ -476,13 +475,13 @@ class HistoryServiceTest {
     @Test
     fun testGetHistoricalPeriod_Throughout() {
 
-        val history = listOf(LocationHistory(1, DateTime(5),DateTime(28), "a","b",1))
+        val history = listOf(LocationHistory(1, DateTime(5),DateTime(28), "z", "a","b",1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
 
@@ -495,13 +494,13 @@ class HistoryServiceTest {
     @Test
     fun testGetHistoricalPeriod_Exact() {
 
-        val history = listOf(LocationHistory(1, DateTime(10),DateTime(20), "a","b",1))
+        val history = listOf(LocationHistory(1, DateTime(10),DateTime(20), "z", "a","b",1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
 
@@ -514,13 +513,13 @@ class HistoryServiceTest {
     @Test
     fun testGetHistoricalPeriod_OngoingDuring() {
 
-        val history = listOf(LocationHistory(1, DateTime(15), null, "a","b",1))
+        val history = listOf(LocationHistory(1, DateTime(15), null, "z", "a","b",1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
 
@@ -535,13 +534,13 @@ class HistoryServiceTest {
     @Test
     fun testGetHistoricalPeriod_EndsDuring() {
 
-        val history = listOf(LocationHistory(1, DateTime(5),DateTime(15), "a","b",1))
+        val history = listOf(LocationHistory(1, DateTime(5),DateTime(15), "z", "a","b",1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
 
@@ -554,13 +553,13 @@ class HistoryServiceTest {
     @Test
     fun testGetHistoricalPeriod_EndsBefore() {
 
-        val history = listOf(LocationHistory(1, DateTime(0),DateTime(5), "a","b",1))
+        val history = listOf(LocationHistory(1, DateTime(0),DateTime(5), "z", "a","b",1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
 
@@ -573,13 +572,13 @@ class HistoryServiceTest {
     @Test
     fun testGetHistoricalPeriod_EndsImmediatelyBefore() {
 
-        val history = listOf(LocationHistory(1, DateTime(0),DateTime(10), "a","b",1))
+        val history = listOf(LocationHistory(1, DateTime(0),DateTime(10), "z", "a","b",1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
 
@@ -592,13 +591,13 @@ class HistoryServiceTest {
     @Test
     fun testGetHistoricalPeriod_BeforeOngoing() {
 
-        val history = listOf(LocationHistory(1, DateTime(0), null, "a","b",1))
+        val history = listOf(LocationHistory(1, DateTime(0), null, "z", "a","b",1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
 
@@ -611,15 +610,15 @@ class HistoryServiceTest {
     @Test
     fun testGetHistoricalPeriod_Multiple() {
 
-        val history = listOf(LocationHistory(1, DateTime(18),null, "a","A",1),
-                                                LocationHistory(1, DateTime(5),DateTime(15), "b","B",1),
-                                                LocationHistory(1, DateTime(15),DateTime(18), "c","C",1))
+        val history = listOf(LocationHistory(1, DateTime(18),null, "z", "a","A",1),
+                                                LocationHistory(1, DateTime(5),DateTime(15), "z", "b","B",1),
+                                                LocationHistory(1, DateTime(15),DateTime(18),"z",  "c","C",1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getHistoricalPeriod(DateTime(10), DateTime(20))
 
@@ -635,13 +634,11 @@ class HistoryServiceTest {
     @Test
     fun testGetPreviousLocation_NoHistory() {
 
-        val history = emptyList<LocationHistory>()
-
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(emptyList())
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getPreviousLocation(DateTime.now())
 
@@ -654,14 +651,14 @@ class HistoryServiceTest {
     @Test
     fun testGetPreviousLocation_OnlyFuture() {
 
-        val history = listOf(LocationHistory(1, DateTime(100), null, "a","a", 1),
-                                                LocationHistory(2, DateTime(200), null, "b","b", 1))
+        val history = listOf(LocationHistory(1, DateTime(100), null, "z", "a","a", 1),
+                                                LocationHistory(2, DateTime(200), null, "z", "b","b", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getPreviousLocation(DateTime(0))
 
@@ -674,13 +671,13 @@ class HistoryServiceTest {
     @Test
     fun testGetPreviousLocation_OnePrevious() {
 
-        val history = listOf(LocationHistory(1, DateTime(0), null, "a","a", 1))
+        val history = listOf(LocationHistory(1, DateTime(0), null, "z", "a","a", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getPreviousLocation(DateTime(100))
 
@@ -694,15 +691,15 @@ class HistoryServiceTest {
     @Test
     fun testGetPreviousLocation_MultiplePrevious() {
 
-        val history = listOf(LocationHistory(1, DateTime(300), null, "a","a", 1),
-                                                LocationHistory(2, DateTime(500), null, "b","b", 1),
-                                                LocationHistory(3, DateTime(400), null, "c","c", 1))
+        val history = listOf(LocationHistory(1, DateTime(300), null, "z", "a","a", 1),
+                                                LocationHistory(2, DateTime(500), null, "z", "b","b", 1),
+                                                LocationHistory(3, DateTime(400), null, "z", "c","c", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getPreviousLocation(DateTime(700))
 
@@ -721,7 +718,7 @@ class HistoryServiceTest {
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getLatestBlogPost()
 
@@ -734,14 +731,14 @@ class HistoryServiceTest {
     @Test
     fun testGetLatestBlogPost_noBlogPosts() {
 
-        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-10), DateTime.now().plusDays(-5), "a","a", 1),
-                                                LocationHistory(2, DateTime.now().plusDays(-5), DateTime.now().plusDays(-1), "b","b", 1))
+        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-10), DateTime.now().plusDays(-5), "z", "a","a", 1),
+                                                LocationHistory(2, DateTime.now().plusDays(-5), DateTime.now().plusDays(-1), "z", "b","b", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getLatestBlogPost()
 
@@ -754,13 +751,13 @@ class HistoryServiceTest {
     @Test
     fun testGetLatestBlogPost_oneBlogPost() {
 
-        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-10), DateTime.now().plusDays(-5), "a","a", 1, BlogPost("https://example.com","blog1")))
+        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-10), DateTime.now().plusDays(-5), "z", "a","a", 1, BlogPost("https://example.com","blog1")))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getLatestBlogPost()
 
@@ -773,15 +770,15 @@ class HistoryServiceTest {
     @Test
     fun testGetLatestBlogPost_multipleBlogPost() {
 
-        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-10), DateTime.now().plusDays(-5), "a","a", 1, BlogPost("https://example.com","blog1")),
-                                                LocationHistory(2, DateTime.now().plusDays(-3), DateTime.now().plusDays(-5), "b","b", 1, BlogPost("https://example.com","blog2")),
-                                                LocationHistory(3, DateTime.now().plusDays(-6), DateTime.now().plusDays(-5), "c","c", 1, BlogPost("https://example.com","blog3")))
+        val history = listOf(LocationHistory(1, DateTime.now().plusDays(-10), DateTime.now().plusDays(-5), "z", "a","a", 1, BlogPost("https://example.com","blog1")),
+                                                LocationHistory(2, DateTime.now().plusDays(-3), DateTime.now().plusDays(-5), "z", "b","b", 1, BlogPost("https://example.com","blog2")),
+                                                LocationHistory(3, DateTime.now().plusDays(-6), DateTime.now().plusDays(-5), "z", "c","c", 1, BlogPost("https://example.com","blog3")))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.getLatestBlogPost()
 
@@ -798,13 +795,90 @@ class HistoryServiceTest {
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(emptyList())
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
-        service.addTrip(DateTime(100), DateTime(200), "a", "b", 2);
+        service.addTrip(DateTime(100), DateTime(200), "z", "a", "b", 2)
 
-        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "a", "b", 2)
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "z", "a", "b", 2)
     }
 
+
+    /**
+     * Tests calling addTrip missing a group name, but without a history, will use unknown.
+     */
+    @Test
+    fun testAddTrip_unknownGroup_noHistory(){
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(emptyList())
+
+        val service = HistoryService()
+        service.repository = mockRepository
+
+        service.addTrip(DateTime(100), DateTime(200), null, "a", "b", 2)
+
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "unknown", "a", "b", 2)
+    }
+
+    /**
+     * Tests calling addTrip missing a group name, but without anything in the past of the history, will use unknown.
+     */
+    @Test
+    fun testAddTrip_unknownGroup_futureHistory(){
+
+        val history = listOf(LocationHistory(1, DateTime(500), null, "holiday", "x", "future", 1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository
+
+        service.addTrip(DateTime(100), DateTime(200), null, "a", "b", 2)
+
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "unknown", "a", "b", 2)
+    }
+
+    /**
+     * Tests calling addTrip missing a group name, with a previous location will use its country.
+     */
+    @Test
+    fun testAddTrip_unknownGroup_onePastHistory(){
+
+        val history = listOf(LocationHistory(1, DateTime(50), null, "q", "x", "past", 1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository
+
+        service.addTrip(DateTime(100), DateTime(200), "z", "a", null, 2)
+
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "z", "a", "past", 2)
+    }
+
+    /**
+     * Tests calling addTrip missing a group name, with multiple previous locations will use the country of the most recent
+     */
+    @Test
+    fun testAddTrip_unknownGroup_multiplePastHistory(){
+
+        val history = listOf(LocationHistory(1, DateTime(50), null, "paster", "y", "c", 1),
+                LocationHistory(2, DateTime(75), null, "past", "x", "d", 1),
+                LocationHistory(3, DateTime(25), null, "pastest", "w", "e", 1))
+
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository
+
+        service.addTrip(DateTime(100), DateTime(200), null, "a", "b", 2)
+
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "past","a", "b", 2)
+    }
+    
     /**
      * Tests calling addTrip missing a country name, but without a history, will use unknown.
      */
@@ -815,11 +889,11 @@ class HistoryServiceTest {
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(emptyList())
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
-        service.addTrip(DateTime(100), DateTime(200), "a", null, 2);
+        service.addTrip(DateTime(100), DateTime(200), "z", "a", null, 2)
 
-        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "a", "unknown", 2)
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "z", "a", "unknown", 2)
     }
 
     /**
@@ -828,17 +902,17 @@ class HistoryServiceTest {
     @Test
     fun testAddTrip_unknownCountry_futureHistory(){
 
-        val history = listOf(LocationHistory(1, DateTime(500), null, "z", "future", 1))
+        val history = listOf(LocationHistory(1, DateTime(500), null, "q", "x", "future", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
-        service.addTrip(DateTime(100), DateTime(200), "a", null, 2);
+        service.addTrip(DateTime(100), DateTime(200), "z", "a", null, 2)
 
-        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "a", "unknown", 2)
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "z", "a", "unknown", 2)
     }
 
     /**
@@ -847,17 +921,17 @@ class HistoryServiceTest {
     @Test
     fun testAddTrip_unknownCountry_onePastHistory(){
 
-        val history = listOf(LocationHistory(1, DateTime(50), null, "z", "past", 1))
+        val history = listOf(LocationHistory(1, DateTime(50), null, "q", "x", "past", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
-        service.addTrip(DateTime(100), DateTime(200), "a", null, 2);
+        service.addTrip(DateTime(100), DateTime(200), "z", "a", null, 2)
 
-        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "a", "past", 2)
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "z", "a", "past", 2)
     }
 
     /**
@@ -866,19 +940,19 @@ class HistoryServiceTest {
     @Test
     fun testAddTrip_unknownCountry_multiplePastHistory(){
 
-        val history = listOf(LocationHistory(1, DateTime(50), null, "z", "paster", 1),
-                                                LocationHistory(2, DateTime(75), null, "y", "past", 1),
-                                                LocationHistory(3, DateTime(25), null, "x", "pastest", 1))
+        val history = listOf(LocationHistory(1, DateTime(50), null, "q", "y", "paster", 1),
+                                                LocationHistory(2, DateTime(75), null, "q", "x", "past", 1),
+                                                LocationHistory(3, DateTime(25), null, "q", "w", "pastest", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
-        service.addTrip(DateTime(100), DateTime(200), "a", null, 2);
+        service.addTrip(DateTime(100), DateTime(200), "z", "a", null, 2)
 
-        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "a", "past", 2)
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "z","a", "past", 2)
     }
 
     /**
@@ -891,11 +965,11 @@ class HistoryServiceTest {
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(emptyList())
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
-        service.addTrip(DateTime(100), DateTime(200), "a", "b", null);
+        service.addTrip(DateTime(100), DateTime(200), "z", "a", "b", null)
 
-        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "a", "b", 0)
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "z", "a", "b", 0)
     }
 
     /**
@@ -904,17 +978,17 @@ class HistoryServiceTest {
     @Test
     fun testAddTrip_unknownTimezone_futureHistory(){
 
-        val history = listOf(LocationHistory(1, DateTime(500), null, "z", "future", 1))
+        val history = listOf(LocationHistory(1, DateTime(500), null, "q", "y", "future", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
-        service.addTrip(DateTime(100), DateTime(200), "a", "b", null);
+        service.addTrip(DateTime(100), DateTime(200), "z", "a", "b", null)
 
-        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "a", "b", 0)
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "z", "a", "b", 0)
     }
 
     /**
@@ -923,17 +997,17 @@ class HistoryServiceTest {
     @Test
     fun testAddTrip_unknownTimezone_onePastHistory(){
 
-        val history = listOf(LocationHistory(1, DateTime(50), null, "z", "past", 1))
+        val history = listOf(LocationHistory(1, DateTime(50), null, "q", "y", "past", 1))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
-        service.addTrip(DateTime(100), DateTime(200), "a", "b", null);
+        service.addTrip(DateTime(100), DateTime(200), "z", "a", "b", null)
 
-        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "a", "b", 1)
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "z", "a", "b", 1)
     }
 
     /**
@@ -942,19 +1016,19 @@ class HistoryServiceTest {
     @Test
     fun testAddTrip_unknownTimezone_multiplePastHistory(){
 
-        val history = listOf(LocationHistory(1, DateTime(50), null, "z", "paster", 1),
-                                                LocationHistory(2, DateTime(75), null, "y", "past", 2),
-                                                LocationHistory(3, DateTime(25), null, "x", "pastest", 3))
+        val history = listOf(LocationHistory(1, DateTime(50), null, "q", "y", "paster", 1),
+                                                LocationHistory(2, DateTime(75), null, "q", "x", "past", 2),
+                                                LocationHistory(3, DateTime(25), null, "q", "w", "pastest", 3))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
-        service.addTrip(DateTime(100), DateTime(200), "a", "b", null);
+        service.addTrip(DateTime(100), DateTime(200), "z", "a", "b", null)
 
-        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "a", "b", 2)
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "z", "a", "b", 2)
     }
 
     /**
@@ -963,22 +1037,22 @@ class HistoryServiceTest {
     @Test
     fun testAddTrip_finishPast(){
 
-        val history = listOf(LocationHistory(1, DateTime(500), null, "z", "future", 1),
-                                                LocationHistory(2, DateTime(75), null, "y", "past", 2),
-                                                LocationHistory(3, DateTime(25), DateTime(75), "x", "pastComplete", 3))
+        val history = listOf(LocationHistory(1, DateTime(500), null, "q", "y", "future", 1),
+                                                LocationHistory(2, DateTime(75), null, "q", "x", "past", 2),
+                                                LocationHistory(3, DateTime(25), DateTime(75), "q", "w", "pastComplete", 3))
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getAllHistory()).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
-        service.addTrip(DateTime(100), DateTime(200), "a", "b", 2);
+        service.addTrip(DateTime(100), DateTime(200), "z", "a", "b", 2)
 
         verify(mockRepository, times(2)).getAllHistory()
-        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "a", "b", 2)
+        verify(mockRepository).addTrip(DateTime(100), DateTime(200), "z", "a", "b", 2)
         verify(mockRepository).updateEndTime(2, DateTime(100))
-        verifyNoMoreInteractions(mockRepository);
+        verifyNoMoreInteractions(mockRepository)
     }
 
     /**
@@ -986,15 +1060,15 @@ class HistoryServiceTest {
      */
     @Test
     fun testAddBlogPost_exists(){
-        val history = LocationHistory(2, DateTime(75), null, "a", "b", 2)
+        val history = LocationHistory(2, DateTime(75), null, "z", "a", "b", 2)
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getSpecificHistory(2)).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
-        service.addBlogPost(2, "https://example.com", "example");
+        service.addBlogPost(2, "https://example.com", "example")
 
         verify(mockRepository).addBlogPost(2, "https://example.com", "example")
     }
@@ -1009,9 +1083,9 @@ class HistoryServiceTest {
         Mockito.`when`(mockRepository.getSpecificHistory(2)).thenReturn(null)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
-        service.addBlogPost(2, "https://example.com", "example");
+        service.addBlogPost(2, "https://example.com", "example")
 
         verify(mockRepository).getSpecificHistory(2)
         verifyNoMoreInteractions(mockRepository)
@@ -1023,15 +1097,15 @@ class HistoryServiceTest {
      */
     @Test
     fun testAddMap_exists(){
-        val history = LocationHistory(2, DateTime(75), null, "a", "b", 2)
+        val history = LocationHistory(2, DateTime(75), null, "z", "a", "b", 2)
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getSpecificHistory(2)).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
-        service.addMap(2, "https://example.com");
+        service.addMap(2, "https://example.com")
 
         verify(mockRepository).addMap(2, "https://example.com")
     }
@@ -1046,9 +1120,9 @@ class HistoryServiceTest {
         Mockito.`when`(mockRepository.getSpecificHistory(2)).thenReturn(null)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
-        service.addMap(2, "https://example.com");
+        service.addMap(2, "https://example.com")
 
         verify(mockRepository).getSpecificHistory(2)
         verifyNoMoreInteractions(mockRepository)
@@ -1064,7 +1138,7 @@ class HistoryServiceTest {
         Mockito.`when`(mockRepository.getSpecificHistory(23)).thenReturn(null)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.updateLocation(23)
 
@@ -1077,17 +1151,17 @@ class HistoryServiceTest {
     @Test
     fun testUpdateLocation_noChanges(){
 
-        val history = LocationHistory(23, DateTime.now(), null, "a", "a", 2)
+        val history = LocationHistory(23, DateTime.now(), null, "z", "a", "a", 2)
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getSpecificHistory(23)).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val result = service.updateLocation(23)
 
         verify(mockRepository).getSpecificHistory(23)
-        verifyNoMoreInteractions(mockRepository);
+        verifyNoMoreInteractions(mockRepository)
 
         Assert.assertEquals(true, result)
     }
@@ -1098,19 +1172,19 @@ class HistoryServiceTest {
     @Test
     fun testUpdateLocation_changeStart(){
 
-        val history = LocationHistory(23, DateTime.now(), null, "a", "a", 2)
+        val history = LocationHistory(23, DateTime.now(), null, "z", "a", "a", 2)
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getSpecificHistory(23)).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val startDate = DateTime(0)
-        val result = service.updateLocation(23, startDate = startDate);
+        val result = service.updateLocation(23, startDate = startDate)
 
         verify(mockRepository).getSpecificHistory(23)
         verify(mockRepository).updateStartTime(23, startDate)
-        verifyNoMoreInteractions(mockRepository);
+        verifyNoMoreInteractions(mockRepository)
 
         Assert.assertEquals(true, result)
     }
@@ -1121,19 +1195,41 @@ class HistoryServiceTest {
     @Test
     fun testUpdateLocation_changeEnd(){
 
-        val history = LocationHistory(23, DateTime.now(), null, "a", "a", 2)
+        val history = LocationHistory(23, DateTime.now(), null, "z", "a", "a", 2)
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getSpecificHistory(23)).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val endDate = DateTime(0)
-        val result = service.updateLocation(23, endDate = endDate);
+        val result = service.updateLocation(23, endDate = endDate)
 
         verify(mockRepository).getSpecificHistory(23)
         verify(mockRepository).updateEndTime(23, endDate)
-        verifyNoMoreInteractions(mockRepository);
+        verifyNoMoreInteractions(mockRepository)
+
+        Assert.assertEquals(true, result)
+    }
+
+    /**
+     * Tests the updateLocation function when trying to change the group name.
+     */
+    @Test
+    fun testUpdateLocation_changeGroup(){
+
+        val history = LocationHistory(23, DateTime.now(), null, "z", "a", "a", 2)
+        val mockRepository = Mockito.mock(HistoryRepository::class.java)
+        Mockito.`when`(mockRepository.getSpecificHistory(23)).thenReturn(history)
+
+        val service = HistoryService()
+        service.repository = mockRepository
+
+        val result = service.updateLocation(23, group = "holiday")
+
+        verify(mockRepository).getSpecificHistory(23)
+        verify(mockRepository).updateGroup(23, "holiday")
+        verifyNoMoreInteractions(mockRepository)
 
         Assert.assertEquals(true, result)
     }
@@ -1144,18 +1240,18 @@ class HistoryServiceTest {
     @Test
     fun testUpdateLocation_changeName(){
 
-        val history = LocationHistory(23, DateTime.now(), null, "a", "a", 2)
+        val history = LocationHistory(23, DateTime.now(), null, "z", "a", "a", 2)
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getSpecificHistory(23)).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
-        val result = service.updateLocation(23, name = "bob");
+        val result = service.updateLocation(23, name = "bob")
 
         verify(mockRepository).getSpecificHistory(23)
         verify(mockRepository).updateName(23, "bob")
-        verifyNoMoreInteractions(mockRepository);
+        verifyNoMoreInteractions(mockRepository)
 
         Assert.assertEquals(true, result)
     }
@@ -1168,19 +1264,18 @@ class HistoryServiceTest {
     @Test
     fun testUpdateLocation_changeCountry(){
 
-        val history = LocationHistory(23, DateTime.now(), null, "a", "a", 2)
+        val history = LocationHistory(23, DateTime.now(), null, "z", "a", "a", 2)
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getSpecificHistory(23)).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
-        val endDate = DateTime(0)
-        val result = service.updateLocation(23, country = "dave");
+        val result = service.updateLocation(23, country = "dave")
 
         verify(mockRepository).getSpecificHistory(23)
         verify(mockRepository).updateCountry(23, "dave")
-        verifyNoMoreInteractions(mockRepository);
+        verifyNoMoreInteractions(mockRepository)
 
         Assert.assertEquals(true, result)
     }
@@ -1191,19 +1286,18 @@ class HistoryServiceTest {
     @Test
     fun testUpdateLocation_changeTimezone(){
 
-        val history = LocationHistory(23, DateTime.now(), null, "a", "a", 2)
+        val history = LocationHistory(23, DateTime.now(), null, "z", "a", "a", 2)
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getSpecificHistory(23)).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
-        val endDate = DateTime(0)
-        val result = service.updateLocation(23, timezone = 5);
+        val result = service.updateLocation(23, timezone = 5)
 
         verify(mockRepository).getSpecificHistory(23)
         verify(mockRepository).updateTimezone(23, 5)
-        verifyNoMoreInteractions(mockRepository);
+        verifyNoMoreInteractions(mockRepository)
 
         Assert.assertEquals(true, result)
     }
@@ -1214,23 +1308,24 @@ class HistoryServiceTest {
     @Test
     fun testUpdateLocation_changeMultiple(){
 
-        val history = LocationHistory(23, DateTime.now(), null, "a", "a", 2)
+        val history = LocationHistory(23, DateTime.now(), null, "z", "a", "a", 2)
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getSpecificHistory(23)).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
         val date = DateTime(0)
-        val result = service.updateLocation(23, startDate = date, endDate = date, name="bob", country = "dave", timezone = 5);
+        val result = service.updateLocation(23, startDate = date, endDate = date, group="holiday", name="bob", country = "dave", timezone = 5)
 
         verify(mockRepository).getSpecificHistory(23)
         verify(mockRepository).updateStartTime(23, date)
         verify(mockRepository).updateEndTime(23, date)
+        verify(mockRepository).updateGroup(23, "holiday")
         verify(mockRepository).updateName(23, "bob")
         verify(mockRepository).updateCountry(23, "dave")
         verify(mockRepository).updateTimezone(23, 5)
-        verifyNoMoreInteractions(mockRepository);
+        verifyNoMoreInteractions(mockRepository)
 
         Assert.assertEquals(true, result)
     }
@@ -1240,15 +1335,15 @@ class HistoryServiceTest {
      */
     @Test
     fun testDeleteBlogPost_exists(){
-        val history = LocationHistory(2, DateTime(75), null, "a", "b", 2)
+        val history = LocationHistory(2, DateTime(75), null, "z", "a", "b", 2)
 
         val mockRepository = Mockito.mock(HistoryRepository::class.java)
         Mockito.`when`(mockRepository.getSpecificHistory(2)).thenReturn(history)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
-        service.deleteBlogPost(2);
+        service.deleteBlogPost(2)
 
         verify(mockRepository).deleteBlogPost(2)
     }
@@ -1263,9 +1358,9 @@ class HistoryServiceTest {
         Mockito.`when`(mockRepository.getSpecificHistory(2)).thenReturn(null)
 
         val service = HistoryService()
-        service.repository = mockRepository;
+        service.repository = mockRepository
 
-        service.deleteBlogPost(2);
+        service.deleteBlogPost(2)
 
         verify(mockRepository).getSpecificHistory(2)
         verifyNoMoreInteractions(mockRepository)

@@ -2,6 +2,7 @@ CREATE TABLE `History` (
 	`uuid` INT(11) NOT NULL AUTO_INCREMENT,
 	`start_time` DATETIME(6) NOT NULL,
 	`end_time` DATETIME(6) NULL DEFAULT NULL,
+	`group` VARCHAR(600) NOT NULL,
 	`name` VARCHAR(600) NOT NULL,
 	`country` VARCHAR(600) NOT NULL,
 	`timezone_offset` INT(11) NOT NULL,

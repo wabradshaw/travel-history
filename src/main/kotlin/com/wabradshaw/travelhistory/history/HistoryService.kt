@@ -99,6 +99,7 @@ class HistoryService() {
     fun updateLocation(uuid: Int,
                        startDate: DateTime? = null,
                        endDate: DateTime? = null,
+                       group: String? = null,
                        name: String? = null,
                        country: String? = null,
                        timezone: Int? = null): Boolean {
@@ -108,6 +109,7 @@ class HistoryService() {
         } else {
             if (startDate != null) repository.updateStartTime(uuid, startDate);
             if (endDate != null) repository.updateEndTime(uuid, endDate);
+            if (group != null) repository.updateGroup(uuid, group);
             if (name != null) repository.updateName(uuid, name);
             if (country != null) repository.updateCountry(uuid, country);
             if (timezone != null) repository.updateTimezone(uuid, timezone);
@@ -122,13 +124,15 @@ class HistoryService() {
      *
      * @param startDate The dateTime when the trip started.
      * @param endDate The dateTime when the user will move on from the trip. Null if that isn't known yet.
+     * @param group The name of the overall group of trips the trip is part of. If this is null, the name of the latest
+     *              trip group will be used.
      * @param name The name of the location for the trip.
-     * @param country The name of the country the trip is in. If this is null, the name of the latest trip will be
+     * @param country The name of the country the trip is in. If this is null, the country of the latest trip will be
      *                used.
-     * @param timezone The timezone offset for the location. If this is null, the name of the latest trip will be
+     * @param timezone The timezone offset for the location. If this is null, the timezone of the latest trip will be
      *                used.
      */
-    fun addTrip(startDate: DateTime, endDate: DateTime?, name: String, country: String?, timezone: Int?) {
+    fun addTrip(startDate: DateTime, endDate: DateTime?, group: String?, name: String, country: String?, timezone: Int?) {
         val existingTrips = getCompleteHistory();
 
         finishEarlierTrips(startDate, existingTrips);
@@ -137,6 +141,7 @@ class HistoryService() {
 
         repository.addTrip(startDate,
                            endDate,
+                           group ?: previousLocation?.group ?: "unknown",
                            name,
                            country ?: previousLocation?.country ?: "unknown",
                            timezone ?:  previousLocation?.timezone ?: 0)
